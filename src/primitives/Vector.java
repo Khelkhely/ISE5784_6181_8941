@@ -7,7 +7,7 @@ import static primitives.Util.isZero;
  * 3-Dimensional coordinate system.
  * @author Rachel and Tehila
  */
-public class Vector extends Point{
+public class Vector extends Point {
 
     /**
      * Constructor to initialize a vector with the three coordinates of its direction
