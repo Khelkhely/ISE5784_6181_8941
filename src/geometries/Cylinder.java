@@ -22,6 +22,8 @@ public class Cylinder extends Tube {
      */
     public Cylinder(double radius, Ray axis, double height) {
         super(radius, axis);
+        if (height < 0)
+            throw new IllegalArgumentException("The height of the cylinder has to be positive number.");
         this.height = height;
     }
 
