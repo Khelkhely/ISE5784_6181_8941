@@ -32,7 +32,10 @@ public class Plane implements Geometry {
      */
     public Plane(Point p, Vector v){
         q = p;
-        normal = normalize(v);
+        if(v.length() == 1)
+            normal = v;
+        else
+            normal = v.normalize();
     }
 
     /**
