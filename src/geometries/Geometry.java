@@ -9,8 +9,8 @@ import primitives.Point;
  */
 public interface Geometry {
     /**
-     * calculates a normal (vertical) vector to the geometry
-     * @param p1 a point on the geometry
+     * calculates a normal (vertical) vector to the geometry from a point on it
+     * @param p1 a point on the geometry the normal is from
      * @return a normal (vertical) vector to the geometry
      */
     public abstract Vector getNormal(Point p1);
