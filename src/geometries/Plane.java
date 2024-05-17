@@ -37,7 +37,7 @@ public class Plane implements Geometry {
         else
             normal = v.normalize();
     }
-    //!!!!!!!!!!!!!!!לבדוק שהנורמל מגיע מהנקודה p
+
     /**
      * calculates a normal (vertical) vector to the geometry
      * @return a normal (vertical) to the plane
@@ -46,10 +46,8 @@ public class Plane implements Geometry {
         return normal;
     }
 
-    //הוא לא צריך להיות תלוי בנקודה שקיבל? לצאת ממנה..
     @Override
     public Vector getNormal(Point p1) {
-        //return normal;
-        return null;
+        return normal;
     }
 }
