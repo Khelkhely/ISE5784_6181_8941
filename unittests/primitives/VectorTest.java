@@ -14,14 +14,20 @@ class VectorTest {
     /** Delta value for accuracy when comparing the numbers of type 'double' in assertEquals */
     private final double DELTA = 0.000001;
 
-    /** Test method for zero vector */
+    /** Test method for {@link Vector#Vector(double, double, double)} */
     @Test
-    void testZeroVector() {
+    void testConstructor1() {
         // =============== Boundary Values Tests ==================
         // TC01: Test that throws proper exception when creating a zero vector
         assertThrows(IllegalArgumentException.class, ()->new Vector(0, 0, 0),
                 "ERROR: zero vector does not throw a fitting exception");
-        // TC02: Test that throws proper exception when creating a zero vector
+    }
+
+    /** Test method for {@link Vector#Vector(Double3)} */
+    @Test
+    void testConstructor2() {
+        // =============== Boundary Values Tests ==================
+        // TC01: Test that throws proper exception when creating a zero vector
         assertThrows(IllegalArgumentException.class, ()->new Vector(Double3.ZERO),
                 "ERROR: zero vector does not throw a fitting exception");
     }
@@ -138,15 +144,15 @@ class VectorTest {
         Vector v = v1.crossProduct(v3);
         // TC01: Test that length of cross-product is proper
         assertEquals(v1.length() * v3.length(), v.length(), DELTA,
-                "crossProduct() wrong result length");
+                "ERROR: crossProduct() wrong result length");
         // TC02: Test cross-product result orthogonality to its operands
         assertEquals(0, v.dotProduct(v1), DELTA,
-                "crossProduct() result is not orthogonal to 1st operand");
+                "ERROR: crossProduct() result is not orthogonal to 1st operand");
         assertEquals(0, v.dotProduct(v3), DELTA,
-                "crossProduct() result is not orthogonal to 2nd operand");
+                "ERROR: crossProduct() result is not orthogonal to 2nd operand");
         // =============== Boundary Values Tests ==================
         // TC11: test zero vector from cross-product of parallel vectors
         assertThrows(IllegalArgumentException.class, () -> v1.crossProduct(v2),
-                "crossProduct() for parallel vectors does not throw an exception");
+                "ERROR: crossProduct() for parallel vectors does not throw an exception");
     }
 }

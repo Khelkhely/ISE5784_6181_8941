@@ -46,9 +46,10 @@ public class Plane implements Geometry {
         return normal;
     }
 
+    //הוא לא צריך להיות תלוי בנקודה שקיבל? לצאת ממנה..
     @Override
     public Vector getNormal(Point p1) {
-        return normal;
-        //return this.getNormal();
+        //return normal;
+        return null;
     }
 }
