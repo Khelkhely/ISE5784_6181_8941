@@ -3,7 +3,7 @@ import primitives.Vector;
 import primitives.Point;
 
 /**
- * Class Geometry is the basic class representing a geometry in Cartesian
+ * Class Geometry is the basic class representing a geometric body or shape in Cartesian
  * 3-Dimensional coordinate system.
  * @author Rachel and Tehila
  */
