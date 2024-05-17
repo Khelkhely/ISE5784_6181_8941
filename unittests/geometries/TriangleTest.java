@@ -11,7 +11,7 @@ class TriangleTest {
     @Test
     void testGetNormal() {
         // ============ Equivalence Partitions Tests ==============
-        // TC01: There is a simple single test here
+        // TC01: Test that normal calculation of triangle is proper
         Point[] pts =
                 { new Point(1, 0, 0),
                         new Point(0, 1, 0),

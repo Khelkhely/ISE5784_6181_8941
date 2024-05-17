@@ -78,12 +78,12 @@ class PlaneTest {
     @Test
     void testTestGetNormal() {
         // ============ Equivalence Partitions Tests ==============
-        // TC01: There is a simple single test here
+        // TC01: Test that normal calculation of plane is proper
         Plane plane = new Plane(new Point(1,0,0),
                 new Point(0,1,0),
                 new Point(-1,0,0));
         // generate the test result
-        Vector result = plane.getNormal(new Point(1,0,0));
+        Vector result = plane.getNormal(new Point(0,0,0));
         // Test that we got the desired result
         assertTrue(new Vector(0,0,1) == result
                         || new Vector(0,0,-1) == result,
