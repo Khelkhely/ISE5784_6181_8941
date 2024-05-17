@@ -26,6 +26,6 @@ class SphereTest {
         // TC01: Test that normal calculation of sphere is proper
         Sphere s1 = new Sphere(2, new Point(1,1,1));
         assertEquals(new Vector(1,0,0), s1.getNormal(new Point(3,1,1)),
-                "ERROR: Sphere normal is wrong");
+                "ERROR: Sphere get normal does not work correctly");
     }
 }
