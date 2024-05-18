@@ -22,13 +22,25 @@ public class Cylinder extends Tube {
      */
     public Cylinder(double radius, Ray axis, double height) {
         super(radius, axis);
-        if (height < 0)
+        if (height <= 0)
             throw new IllegalArgumentException("The height of the cylinder has to be positive number.");
         this.height = height;
     }
 
     @Override
     public Vector getNormal(Point p1) {
-        return super.getNormal(p1); //null
+        Point center1 = axis.getHead();
+        if (p1.equals(center1)) //the point is the center of the first base
+            return axis.getDirection().scale(-1);
+        double dotProduct = axis.getDirection().dotProduct(p1.subtract(center1));
+        if (dotProduct == 0) //the point is on the first base
+            return axis.getDirection().scale(-1);
+        Point center2 = center1.add(axis.getDirection().scale(height)); //center of second base
+        if (p1.equals(center2)) //the point is the center of the second base
+            return axis.getDirection();
+        if (axis.getDirection().dotProduct(p1.subtract(center2)) == 0) //point is on the second base
+            return axis.getDirection();
+        //point is on the round surface
+        return p1.subtract(center1.add(axis.getDirection().scale(dotProduct))).normalize();
     }
 }
