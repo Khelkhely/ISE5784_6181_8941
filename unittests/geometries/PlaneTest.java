@@ -88,5 +88,6 @@ class PlaneTest {
         assertTrue(new Vector(0,0,1) == result
                         || new Vector(0,0,-1) == result,
                 "ERROR: it is not the desired normal");
+
     }
 }
