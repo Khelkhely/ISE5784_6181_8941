@@ -48,7 +48,7 @@ class PlaneTest {
     @Test
     void testGetNormal() {
         // ============ Equivalence Partitions Tests ==============
-        // TC01: There is a simple single test here
+        // TC01: Test that the normal we got is proper
         Plane plane = new Plane(new Point(1,0,0),
                 new Point(0,1,0),
                 new Point(-1,0,0));
@@ -59,34 +59,29 @@ class PlaneTest {
                 "ERROR: getNormal threw an exception");
         // ensure |result| = 1
         assertEquals(1, result.length(), DELTA,
-                "ERROR: Plane's normal is not a unit vector");
+                "ERROR: plane's normal is not a unit vector");
         Vector v1 = new Vector(1,0,0).subtract(new Point(0,1,0));
         Vector v2 = new Vector(-1,0,0).subtract(new Point(0,1,0));
         // ensure the result is orthogonal to the plane
         assertEquals(0, result.dotProduct(v1), DELTA,
-                   "ERROR: Polygon's normal is not orthogonal to the plane");
+                   "ERROR: plane's normal is not orthogonal to the plane");
         assertEquals(0, result.dotProduct(v2), DELTA,
-                "ERROR: Polygon's normal is not orthogonal to the plane");
-        // Test that we got the desired result
-        assertTrue(new Vector(0,0,1) == result
-                        || new Vector(0,0,-1) == result,
-                "ERROR: it is not the desired normal");
-
+                "ERROR: plane's normal is not orthogonal to the plane");
     }
 
     /** Test method for {@link Plane#getNormal(Point)} */
     @Test
     void testTestGetNormal() {
         // ============ Equivalence Partitions Tests ==============
-        // TC01: Test that normal calculation of plane is proper
+        // TC01: Test that the normal we got is proper
         Plane plane = new Plane(new Point(1,0,0),
                 new Point(0,1,0),
                 new Point(-1,0,0));
         // generate the test result
-        Vector result = plane.getNormal(new Point(0,0,0));
+        Vector result = plane.getNormal(new Point(0, 0, 0));
         // Test that we got the desired result
-        assertTrue(new Vector(0,0,1) == result
-                        || new Vector(0,0,-1) == result,
+        assertTrue(new Vector(0,0,1).equals(result)
+                        || new Vector(0,0,-1).equals(result),
                 "ERROR: it is not the desired normal");
 
     }

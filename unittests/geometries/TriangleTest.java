@@ -7,6 +7,10 @@ import primitives.Vector;
 import static org.junit.jupiter.api.Assertions.*;
 
 class TriangleTest {
+
+    /** Delta value for accuracy when comparing the numbers of type 'double' in assertEquals */
+    private final double DELTA = 0.000001;
+
     /** Test method for {@link Triangle#getNormal(Point)} */
     @Test
     void testGetNormal() {
@@ -21,8 +25,8 @@ class TriangleTest {
         // generate the test result
         Vector result = triangle.getNormal(new Point(-1, 0, 0));
         // Test that we got the desired result
-        assertTrue(new Vector(0,0,1) == result
-                        || new Vector(0,0,-1) == result,
+        assertTrue(new Vector(0,0,1).equals(result)
+                        || new Vector(0,0,-1).equals(result),
                 "ERROR: it is not the desired normal");
     }
 }
