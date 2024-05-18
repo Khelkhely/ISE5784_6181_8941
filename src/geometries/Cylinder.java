@@ -29,18 +29,14 @@ public class Cylinder extends Tube {
 
     @Override
     public Vector getNormal(Point p1) {
-        Point center1 = axis.getHead();
-        if (p1.equals(center1)) //the point is the center of the first base
+        if (p1.equals(axis.getHead()) || //the point is the center of the first base
+                axis.getDirection().dotProduct(p1.subtract(axis.getHead())) == 0) //the point is on the first base
             return axis.getDirection().scale(-1);
-        double dotProduct = axis.getDirection().dotProduct(p1.subtract(center1));
-        if (dotProduct == 0) //the point is on the first base
-            return axis.getDirection().scale(-1);
-        Point center2 = center1.add(axis.getDirection().scale(height)); //center of second base
-        if (p1.equals(center2)) //the point is the center of the second base
-            return axis.getDirection();
-        if (axis.getDirection().dotProduct(p1.subtract(center2)) == 0) //point is on the second base
+        Point center2 = axis.getHead().add(axis.getDirection().scale(height)); //center of second base
+        if (p1.equals(center2) || //the point is the center of the second base
+                axis.getDirection().dotProduct(p1.subtract(center2)) == 0) //point is on the second base
             return axis.getDirection();
         //point is on the round surface
-        return p1.subtract(center1.add(axis.getDirection().scale(dotProduct))).normalize();
+        return super.getNormal(p1);
     }
 }
