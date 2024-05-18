@@ -50,7 +50,7 @@ class CylinderTest {
                 "ERROR: normal from point on the round surface does not work correctly");
 
         // TC02: Test normal from point on the first base of the cylinder
-        assertEquals(new Vector(0,1,0), c.getNormal(new Point(1,0,1)),
+        assertEquals(new Vector(0,-1,0), c.getNormal(new Point(1,0,1)),
                 "ERROR: normal from point on the first base does not work correctly");
 
         // TC03: Test normal from point on the second base of the cylinder

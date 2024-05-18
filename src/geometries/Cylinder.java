@@ -22,26 +22,21 @@ public class Cylinder extends Tube {
      */
     public Cylinder(double radius, Ray axis, double height) {
         super(radius, axis);
-        if (height < 0)
+        if (height <= 0)
             throw new IllegalArgumentException("The height of the cylinder has to be positive number.");
         this.height = height;
     }
 
     @Override
-    public Vector getNormal(Point p1)
-    {
-        // the point on 'axis' and on the second base of the cylinder
-        Point head2 = axis.getHead().add(axis.getDirection().scale(height));
-
-        if (p1.subtract(axis.getHead()).dotProduct(axis.getDirection()) == 0) // if p1 is on the first base of the cylinder
-                // if the vector between p1 and the head of 'axis' is vertical to the direction of 'axis'
+    public Vector getNormal(Point p1) {
+        if (p1.equals(axis.getHead()) || //the point is the center of the first base
+                axis.getDirection().dotProduct(p1.subtract(axis.getHead())) == 0) //the point is on the first base
             return axis.getDirection().scale(-1);
-
-        if (p1.subtract(head2).dotProduct(axis.getDirection()) == 0) // if p1 is on the second base of the cylinder
-                // if the vector between p1 and head2 is vertical to the direction of 'axis'
+        Point center2 = axis.getHead().add(axis.getDirection().scale(height)); //center of second base
+        if (p1.equals(center2) || //the point is the center of the second base
+                axis.getDirection().dotProduct(p1.subtract(center2)) == 0) //point is on the second base
             return axis.getDirection();
-
-        // if p1 is on the round surface of the cylinder
+        //point is on the round surface
         return super.getNormal(p1);
     }
 }
