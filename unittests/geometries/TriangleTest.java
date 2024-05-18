@@ -19,7 +19,7 @@ class TriangleTest {
         Triangle triangle = new Triangle(pts);
 
         // generate the test result
-        Vector result = triangle.getNormal(new Point(0, 0, 0));
+        Vector result = triangle.getNormal(new Point(-1, 0, 0));
         // Test that we got the desired result
         assertTrue(new Vector(0,0,1) == result
                         || new Vector(0,0,-1) == result,

@@ -10,6 +10,18 @@ import static org.junit.jupiter.api.Assertions.*;
 class TubeTest {
 
     /**
+     * Test method for {@link Tube#Tube(double, Ray)}
+     */
+    @Test
+    void testConstructor() {
+        // =============== Boundary Values Tests ==================
+        // TC01: Test that throws exception if radius is zero
+        assertThrows(IllegalArgumentException.class,
+                () -> new Tube(0,
+                        new Ray(new Point(1, 1, 1), new Vector(1, 0, 0))));
+    }
+
+    /**
      * Test method for {@link Tube#getNormal(Point)}
      */
     @Test
