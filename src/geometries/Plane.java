@@ -37,7 +37,6 @@ public class Plane implements Geometry {
         else
             normal = v.normalize();
     }
-
     /**
      * calculates a normal (vertical) vector to the geometry
      * @return a normal (vertical) to the plane
