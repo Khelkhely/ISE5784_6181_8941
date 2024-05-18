@@ -28,7 +28,18 @@ public class Cylinder extends Tube {
     }
 
     @Override
-    public Vector getNormal(Point p1) {
-        return super.getNormal(p1); //null
+    public Vector getNormal(Point p1)
+    {
+        // the point on 'axis' and on the second base of the cylinder
+        Point head2 = axis.getHead().add(axis.getDirection().scale(height));
+
+        if(p1.subtract(axis.getHead()).dotProduct(axis.getDirection()) == 0 // if p1 is on the first base of the cylinder
+                // if the vector between p1 and the head of 'axis' is vertical to the direction of 'axis'
+            || p1.subtract(head2).dotProduct(axis.getDirection()) == 0) // if p1 is on the second base of the cylinder
+                // if the vector between p1 and head2 is vertical to the direction of 'axis'
+            return axis.getDirection();
+
+        else // if p1 is on the round surface of the cylinder
+            return super.getNormal(p1);
     }
 }
