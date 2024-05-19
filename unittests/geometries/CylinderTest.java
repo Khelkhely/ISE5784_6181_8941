@@ -26,14 +26,6 @@ class CylinderTest {
                 ()-> new Cylinder(2,
                         new Ray(new Point(1,1,1), new Vector(1,0,0)),
                         0));
-        /*
-        // TC03: Test that throws exception if the Vector of the axis is the zero vector
-        assertThrows(IllegalArgumentException.class,
-                ()-> new Cylinder(2,
-                        new Ray(new Point(1,1,1), new Vector(0,0,0)),
-                        2));
-        //כבר נבדק בבדיקות של וקטור
-         */
     }
 
     /**
