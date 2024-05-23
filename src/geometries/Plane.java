@@ -3,6 +3,8 @@ package geometries;
 import primitives.Point;
 import primitives.Vector;
 
+import static primitives.Util.isZero;
+
 /**
  * Class Plane is the basic class representing a plane in Cartesian
  * 3-Dimensional coordinate system.
@@ -34,10 +36,7 @@ public class Plane implements Geometry {
      */
     public Plane(Point p, Vector v){
         q = p;
-        if(v.length() == 1)
-            normal = v;
-        else
-            normal = v.normalize();
+        normal = v.normalize();
     }
 
     /**
