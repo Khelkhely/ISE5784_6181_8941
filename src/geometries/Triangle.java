@@ -14,13 +14,13 @@ public class Triangle extends Polygon {
 
     /**
      * Constructor to initialize a triangle based on the polygon constructor
-     * @param vertices list of the three vertices of the triangle
+     * @param p1 first vertices of the triangle
+     * @param p2 second vertices of the triangle
+     * @param p3 third vertices of the triangle
      * @throws IllegalArgumentException if trying to create a triangle with more or less then 3 vertices
      */
-    public Triangle(Point... vertices) {
-        super(vertices);
-        if(vertices.length != 3)
-            throw new IllegalArgumentException("A Triangle has to have exactly 3 vertices");
+    public Triangle(Point p1, Point p2,Point p3) {
+        super(p1,p2,p3);
     }
 
     @Override

@@ -80,8 +80,7 @@ class PlaneTest {
         // generate the test result
         Vector result = plane.getNormal(new Point(0, 0, 0));
         // Test that we got the desired result
-        assertTrue(new Vector(0,0,1).equals(result)
-                        || new Vector(0,0,-1).equals(result),
+        assertEquals(new Vector(0,0,1), result,
                 "ERROR: it is not the desired normal");
 
     }
