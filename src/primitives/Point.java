@@ -31,8 +31,8 @@ public class Point {
     }
 
     /**
-     * calculates the vector between the point received as parameter to the current point
-     * @param p1 point that the vector starts from
+     * calculates the vector between the parameter point to the current point
+     * @param p1 the point the vector starts from
      * @return a new vector between p1 and the current point
      */
     public Vector subtract(Point p1) {
@@ -49,9 +49,9 @@ public class Point {
     }
 
     /**
-     * calculates the squared distance between the two points
+     * calculates the squared distance between the current and parameter point
      * @param p1 the other point
-     * @return the squared distance between the current point and given point
+     * @return the squared distance between the current point and parameter point
      */
     public double distanceSquared(Point p1) {
         return (xyz.d1 - p1.xyz.d1) * (xyz.d1 - p1.xyz.d1) +
@@ -60,9 +60,9 @@ public class Point {
     }
 
     /**
-     * calculates the squared distance between the two points
+     * calculates the squared distance between the current and parameter point
      * @param p1 the other point
-     * @return the distance between the current point and given point
+     * @return the distance between the current point and parameter point
      */
     public double distance(Point p1) {
         return Math.sqrt(distanceSquared(p1));

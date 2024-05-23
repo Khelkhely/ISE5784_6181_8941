@@ -37,10 +37,10 @@ public class Vector extends Point {
     }
 
     /**
-     * calculates the sum of the two vectors
+     * calculates the sum of the current vector and parameter vector
      *
      * @param v1 the vector that is added to the current vector
-     * @return a vector that is the sum of the current vector and parameter vector
+     * @return a vector that is the sum of the current vector and v1
      */
     public Vector add(Vector v1) {
         return new Vector(xyz.add(v1.xyz));
@@ -57,7 +57,7 @@ public class Vector extends Point {
     }
 
     /**
-     * calculates the dot-product of the two vectors
+     * calculates the dot-product of the current vector and parameter vector
      *
      * @param v1 the second vector
      * @return the sum of each of the three coordinates of the vector multiplied by the
@@ -96,11 +96,11 @@ public class Vector extends Point {
     public Vector normalize() { return scale(1 / length()); }
 
     /**
-     * calculates a vector that is orthogonal to both the current and the parameter vector
+     * calculates a vector that is orthogonal to both the current and parameter vector
      * (the vector points upward in the perspective in which the current vector is to the right of the second vector)
      *
      * @param v1 the parameter vector
-     * @return a vector that is orthogonal to both vectors
+     * @return a vector that is orthogonal to the current vector and parameter vector
      */
     public Vector crossProduct(Vector v1) {
         return new Vector(xyz.d2 * v1.xyz.d3 - xyz.d3 * v1.xyz.d2,
