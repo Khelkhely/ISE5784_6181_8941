@@ -1,7 +1,10 @@
 package geometries;
 
 import primitives.Point;
+import primitives.Ray;
 import primitives.Vector;
+
+import java.util.List;
 
 /**
  * Class Sphere is the basic class representing a sphere in Cartesian
@@ -22,9 +25,14 @@ public class Sphere extends RadialGeometry {
         this.center = center;
     }
 
-
     @Override
     public Vector getNormal(Point p1) {
         return p1.subtract(center).normalize();
+    }
+
+    @Override
+    public List<Point> findIntersections(Ray ray) {
+        return null;
+
     }
 }

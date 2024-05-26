@@ -7,7 +7,7 @@ import primitives.Point;
  * 3-Dimensional coordinate system.
  * @author Rachel and Tehila
  */
-public interface Geometry {
+public interface Geometry extends Intersectable {
     /**
      * calculates a normal (vertical) vector to the geometry from a point on it
      * @param p1 a point on the geometry the normal is from
