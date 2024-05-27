@@ -2,7 +2,10 @@ package geometries;
 
 import org.junit.jupiter.api.Test;
 import primitives.Point;
+import primitives.Ray;
 import primitives.Vector;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -83,5 +86,53 @@ class PlaneTest {
         assertEquals(new Vector(0,0,1), result,
                 "ERROR: it is not the desired normal");
 
+    }
+
+    /**
+     * Test method for {@link Plane#findIntersections(Ray)}
+     */
+    @Test
+    void testFindIntersections() {
+        Plane plane = new Plane(new Point(1,0,0), new Point(0,1,0), new Point(0,0,1));
+
+        // ============ Equivalence Partitions Tests ==============
+        // TC01: Ray intersects the plane
+        List<Point> list = plane.findIntersections(new Ray(new Point(-5,0,0), new Vector(3,1,0)));
+        assertEquals(1, list.size(),
+                "ERROR: doesn't return one intersection point");
+        assertEquals(new Point(-0.5,1.5,0), list.getFirst(),
+                "ERROR: doesn't return the right intersection point");
+
+        // TC02: Ray doesn't intersect the plane
+        assertNull(plane.findIntersections(new Ray(new Point(0,2,0), new Vector(0,1,0))),
+                "ERROR: doesn't return null if there are no intersections");
+
+
+        // =============== Boundary Values Tests ==================
+        // TC11: Ray is parallel to the plane
+        assertNull(plane.findIntersections(new Ray(new Point(0,2,0), new Vector(1,-1,0))),
+                "ERROR: doesn't return null if ray is parallel to the plane");
+        // TC12: Ray is on the plane
+        assertNull(plane.findIntersections(new Ray(new Point(-1,2,0), new Vector(0,1,1))),
+                "ERROR: doesn't return null if ray is on the plane");
+        // TC13: Ray is orthogonal to the plane and starts before it
+        assertEquals(new Point(0.666667, -0.333333, 0.666667),
+                plane.findIntersections(new Ray(new Point(0,-1,0), new Vector(1,1,1))).getFirst(),
+                "ERROR: doesn't work if the ray is orthogonal to the plane and has an intersection");
+        // TC14: Ray is orthogonal to the plane and starts after it
+        assertNull(plane.findIntersections(new Ray(new Point(1,0,1), new Vector(1,1,1))).getFirst(),
+                "ERROR: doesn't work if the ray is orthogonal to the plane and doesn't have an intersection");
+        // TC15: Ray is orthogonal to the plane and starts on it
+        assertNull(plane.findIntersections(
+                new Ray(new Point(0.666667, -0.333333, 0.666667), new Vector(1,1,1))).getFirst(),
+                "ERROR: doesn't work if the ray is orthogonal to the plane and starts at the intersection");
+        // TC11: Ray begins on the plane
+        assertNull(plane.findIntersections(
+                new Ray (new Point (1,2,-2), new Vector(-1,-2,8))).getFirst(),
+                "ERROR: doesn't return null if the ray starts on the plane");
+        // TC11: Ray begins on the point that the plane is defined by
+        assertNull(plane.findIntersections(
+                        new Ray (new Point (1,0,0), new Vector(-1,-2,8))).getFirst(),
+                "ERROR: doesn't return null if the ray starts on the point the plane is defined by");
     }
 }

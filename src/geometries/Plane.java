@@ -21,7 +21,7 @@ public class Plane implements Geometry {
 
     /**
      * Constructor to initialize a plane by calculating its normal by three points on the plane
-     * @param p1 first point on the plane
+     * @param p1 first point on the plane (the point the plane is defined by)
      * @param p2 second point on the plane
      * @param p3 third point on the plane
      */
