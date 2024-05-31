@@ -40,6 +40,7 @@ class TriangleTest {
         Point p020 = new Point(0,2,0);
         Point p111 = new Point(1,1,1);
         Point p011 = new Point(0,1,1);
+        Point p010 = new Point(0,1,0);
         Point p031 = new Point(0,3,1);
         Point p101 = new Point(1,0,1);
         Point p0d511 = new Point(0.5,1,1);
@@ -49,11 +50,10 @@ class TriangleTest {
         List<Point> exp;
         List<Point> result;
         // ============ Equivalence Partitions Tests ==============
-        // TC01: Ray is inside the triangle (9 point)
-        exp = List.of(p100);
+        // TC01: Ray is inside the triangle (1 point)
         result = triangle.findIntersections(new Ray(p011, v00m2));
         assertEquals(1, result.size(), "Wrong number of points");
-        assertEquals(exp, result, "Ray inside the triangle");
+        assertEquals(p010, result.getFirst(), "Ray inside the triangle");
 
         // TC02: Ray is after a vertex of the triangle (0 points)
         assertNull(triangle.findIntersections(new Ray(p031, v00m2)),

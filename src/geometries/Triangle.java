@@ -42,11 +42,15 @@ public class Triangle extends Polygon {
         Point p2 = vertices.get(1);
         Point p3 = vertices.get(2);
 
+        if(p1.equals(p0) || p2.equals(p0) || p3.equals(p0)) {
+            return null;
+        }
         Vector v1 = p1.subtract(p0);
         Vector v2 = p2.subtract(p0);
         Vector v3 = p3.subtract(p0);
 
-        Vector n1 = v1.crossProduct(v1).normalize();
+
+        Vector n1 = v1.crossProduct(v2).normalize();
         Vector n2 = v2.crossProduct(v3).normalize();
         Vector n3 = v3.crossProduct(v1).normalize();
 
