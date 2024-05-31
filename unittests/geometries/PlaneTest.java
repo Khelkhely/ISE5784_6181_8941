@@ -109,30 +109,31 @@ class PlaneTest {
 
 
         // =============== Boundary Values Tests ==================
+        Point p3 = new Point(0.6666666666666667,-0.33333333333333326,0.6666666666666667);
         // TC11: Ray is parallel to the plane
         assertNull(plane.findIntersections(new Ray(new Point(0,2,0), new Vector(1,-1,0))),
                 "ERROR: doesn't return null if ray is parallel to the plane");
         // TC12: Ray is on the plane
-        assertNull(plane.findIntersections(new Ray(new Point(-1,2,0), new Vector(0,1,1))),
+        assertNull(plane.findIntersections(new Ray(new Point(-1,2,0), new Vector(0,1,-1))),
                 "ERROR: doesn't return null if ray is on the plane");
         // TC13: Ray is orthogonal to the plane and starts before it
-        assertEquals(new Point(0.666667, -0.333333, 0.666667),
+        assertEquals(p3,
                 plane.findIntersections(new Ray(new Point(0,-1,0), new Vector(1,1,1))).getFirst(),
                 "ERROR: doesn't work if the ray is orthogonal to the plane and has an intersection");
         // TC14: Ray is orthogonal to the plane and starts after it
-        assertNull(plane.findIntersections(new Ray(new Point(1,0,1), new Vector(1,1,1))).getFirst(),
+        assertNull(plane.findIntersections(new Ray(new Point(1,0,1), new Vector(1,1,1))),
                 "ERROR: doesn't work if the ray is orthogonal to the plane and doesn't have an intersection");
         // TC15: Ray is orthogonal to the plane and starts on it
         assertNull(plane.findIntersections(
-                new Ray(new Point(0.666667, -0.333333, 0.666667), new Vector(1,1,1))).getFirst(),
+                new Ray(p3, new Vector(1,1,1))),
                 "ERROR: doesn't work if the ray is orthogonal to the plane and starts at the intersection");
         // TC11: Ray begins on the plane
         assertNull(plane.findIntersections(
-                new Ray (new Point (1,2,-2), new Vector(-1,-2,8))).getFirst(),
+                new Ray (new Point (1,2,-2), new Vector(-1,-2,8))),
                 "ERROR: doesn't return null if the ray starts on the plane");
         // TC11: Ray begins on the point that the plane is defined by
         assertNull(plane.findIntersections(
-                        new Ray (new Point (1,0,0), new Vector(-1,-2,8))).getFirst(),
+                        new Ray (new Point (1,0,0), new Vector(-1,-2,8))),
                 "ERROR: doesn't return null if the ray starts on the point the plane is defined by");
     }
 }

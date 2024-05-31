@@ -4,8 +4,10 @@ import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
 
+import java.util.LinkedList;
 import java.util.List;
 
+import static primitives.Util.alignZero;
 import static primitives.Util.isZero;
 
 /**
@@ -57,6 +59,22 @@ public class Plane implements Geometry {
 
     @Override
     public List<Point> findIntersections(Ray ray) {
-        return null;
+        Vector direction = ray.getDirection();
+        Point head = ray.getHead();
+        double dotProduct = alignZero(direction.dotProduct(normal));
+        if (dotProduct == 0) {
+            return null;
+        }
+        if (q.equals(head))
+            return null;
+        double t = alignZero(normal.dotProduct(q.subtract(head)) / dotProduct);
+        LinkedList<Point> list = new LinkedList<>();
+        if (t <= 0) {
+            return null;
+        }
+        else {
+            list.add(head.add(direction.scale(t)));
+        }
+        return list;
     }
 }
