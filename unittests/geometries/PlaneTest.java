@@ -110,6 +110,7 @@ class PlaneTest {
 
         // =============== Boundary Values Tests ==================
         Point p3 = new Point(0.6666666666666667,-0.33333333333333326,0.6666666666666667);
+
         // TC11: Ray is parallel to the plane
         assertNull(plane.findIntersections(new Ray(new Point(0,2,0), new Vector(1,-1,0))),
                 "ERROR: doesn't return null if ray is parallel to the plane");
