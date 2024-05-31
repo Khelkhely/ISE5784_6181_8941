@@ -35,8 +35,6 @@ public class Triangle extends Polygon {
 
     @Override
     public List<Point> findIntersections(Ray ray) {
-        Point p = plane.findIntersections(ray).getFirst();
-
         Point p0 = ray.getHead();
         Vector v = ray.getDirection();
 
