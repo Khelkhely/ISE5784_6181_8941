@@ -59,8 +59,6 @@ class SphereTest {
         Sphere sphere = new Sphere(1d, p200);
         List<Point> exp;
         List<Point> result;
-        //final Vector v110 = new Vector(1, 1, 0);
-        //final Point p01 = new Point(-1, 0, 0);
 
         // ============ Equivalence Partitions Tests ==============
         // TC01: Ray's line is outside the sphere (0 points)
@@ -83,7 +81,7 @@ class SphereTest {
 
         // =============== Boundary Values Tests ==================
         // **** Group: Ray's line crosses the sphere (but not the center)
-        // TC11: Ray starts at sphere and goes inside (1 points)
+        // TC11: Ray starts at sphere and goes inside (1 point)
         exp = List.of(p201);
         result = sphere.findIntersections(new Ray(p100, v202));
         assertEquals(1, result.size(), "Wrong number of points");
@@ -100,19 +98,19 @@ class SphereTest {
         assertEquals(2, result.size(), "Wrong number of points");
         assertEquals(exp, result, "Ray starts before the sphere");
 
-        // TC14: Ray starts at sphere and goes inside (1 points)
+        // TC14: Ray starts at sphere and goes inside (1 point)
         exp = List.of(p300);
         result = sphere.findIntersections(new Ray(p100, v400));
         assertEquals(1, result.size(), "Wrong number of points");
         assertEquals(exp, result, "Ray starts at sphere and goes inside");
 
-        // TC15: Ray starts inside (1 points)
+        // TC15: Ray starts inside (1 point)
         exp = List.of(p300);
         result = sphere.findIntersections(new Ray(p2d500, v100));
         assertEquals(1, result.size(), "Wrong number of points");
         assertEquals(exp, result, "Ray starts inside");
 
-        // TC16: Ray starts at the center (1 points)
+        // TC16: Ray starts at the center (1 point)
         exp = List.of(p300);
         result = sphere.findIntersections(new Ray(p200, v100));
         assertEquals(1, result.size(), "Wrong number of points");

@@ -2,7 +2,10 @@ package geometries;
 
 import org.junit.jupiter.api.Test;
 import primitives.Point;
+import primitives.Ray;
 import primitives.Vector;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -25,5 +28,53 @@ class TriangleTest {
         // Test that we got the desired result
         assertEquals(new Vector(0,0,1), result,
                 "ERROR: it is not the desired normal");
+    }
+
+    /**
+     * Test method for {@link Triangle#findIntersections(Ray)}.
+     */
+    @Test
+    void testFindIntersections() {
+        Point p100 = new Point(1,0,0);
+        Point pm100 = new Point(-1,0,0);
+        Point p020 = new Point(0,2,0);
+        Point p111 = new Point(1,1,1);
+        Point p011 = new Point(0,1,1);
+        Point p031 = new Point(0,3,1);
+        Point p101 = new Point(1,0,1);
+        Point p0d511 = new Point(0.5,1,1);
+        Point p1d501 = new Point(1.5,0,1);
+        Vector v00m2 = new Vector(0,0,-2);
+        Triangle triangle = new Triangle(p100, pm100, p020);
+        List<Point> exp;
+        List<Point> result;
+        // ============ Equivalence Partitions Tests ==============
+        // TC01: Ray is inside the triangle (9 point)
+        exp = List.of(p100);
+        result = triangle.findIntersections(new Ray(p011, v00m2));
+        assertEquals(1, result.size(), "Wrong number of points");
+        assertEquals(exp, result, "Ray inside the triangle");
+
+        // TC02: Ray is after a vertex of the triangle (0 points)
+        assertNull(triangle.findIntersections(new Ray(p031, v00m2)),
+                "Ray after a vertex of the triangle");
+
+        // TC03: Ray is after a side of the triangle (0 points)
+        assertNull(triangle.findIntersections(new Ray(p111, v00m2)),
+                "Ray after a side of the triangle");
+
+        // =============== Boundary Values Tests ==================
+        // TC11: Ray is on a vertex of the triangle (0 points)
+        assertNull(triangle.findIntersections(new Ray(p101, v00m2)),
+                "Ray on a vertex of the triangle");
+
+        // TC12: Ray is on a side of the triangle (0 points)
+        assertNull(triangle.findIntersections(new Ray(p0d511, v00m2)),
+                "Ray on a side of the triangle");
+
+        // TC13: Ray is on a side's continue (0 points)
+        assertNull(triangle.findIntersections(new Ray(p1d501, v00m2)),
+                "Ray on a side's continue");
+
     }
 }
