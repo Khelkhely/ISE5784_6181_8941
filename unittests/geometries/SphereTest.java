@@ -48,14 +48,16 @@ class SphereTest {
         final Point p0d500 = new Point(0.5, 0, 0);
         final Point p00m1 = new Point(0, 0, -1);
         final Point pm100 = new Point(-1, 0, 0);
-        final Point p1d500 = new Point(1.5, 0, 1);
+        final Point p1d500 = new Point(1.5, 0, 0);
+        final Point p1d500d86 = new Point(1.5, 0, 0.8660254037844);
         final Vector v100 = new Vector(1, 0, 0);
+        final Vector v200 = new Vector(2, 0, 0);
+        final Vector v102 = new Vector(1, 0, 2);
         final Vector v400 = new Vector(4, 0, 0);
         final Vector v202 = new Vector(2, 0, 2);
         final Vector v303 = new Vector(3, 0, 3);
         final Vector v110 = new Vector(1, 1, 0);
         final Vector v001 = new Vector(0, 0, 1);
-        final Vector v0d501 = new Vector(0.5, 0, 1);
         Sphere sphere = new Sphere(1d, p200);
         List<Point> exp;
         List<Point> result;
@@ -72,7 +74,7 @@ class SphereTest {
 
         // TC03: Ray starts inside the sphere (1 point)
         exp = List.of(p201);
-        result = sphere.findIntersections(new Ray(p1d500, v0d501));
+        result = sphere.findIntersections(new Ray(p1d500, v102));
         assertEquals(1, result.size(), "Wrong number of points");
         assertEquals(exp, result, "Ray starts inside the sphere");
 
@@ -112,7 +114,7 @@ class SphereTest {
 
         // TC16: Ray starts at the center (1 point)
         exp = List.of(p300);
-        result = sphere.findIntersections(new Ray(p200, v100));
+        result = sphere.findIntersections(new Ray(p200, v200));
         assertEquals(1, result.size(), "Wrong number of points");
         assertEquals(exp, result, "Ray starts at the center");
 
@@ -138,12 +140,14 @@ class SphereTest {
                 "Ray starts after the tangent point");
 
         // **** Group: Special cases
-        // TC22: Ray's line is outside, ray is orthogonal to ray start to sphere's center line
+        // TC22: Ray's line is outside, ray is orthogonal to ray start to sphere's center line (0 points)
         assertNull(sphere.findIntersections(new Ray(p0d500, v001)),
                 "Ray's line is outside and orthogonal");
 
-        // TC23: Ray's line is inside the sphere, ray is orthogonal to sphere's center line
-        assertNull(sphere.findIntersections(new Ray(p1d500, v001)),
-                "Ray's line is inside and orthogonal");
+        // TC23: Ray's line is inside the sphere, ray is orthogonal to sphere's center line (1 point)
+        exp = List.of(p1d500d86);
+        result = sphere.findIntersections(new Ray(p1d500, v001));
+        assertEquals(1, result.size(), "Wrong number of points");
+        assertEquals(exp, result, "Ray's line is inside and orthogonal");
     }
 }

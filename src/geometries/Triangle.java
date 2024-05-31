@@ -6,6 +6,8 @@ import primitives.Vector;
 
 import java.util.List;
 
+import static primitives.Util.compareSign;
+
 /**
  * Class Triangle is the basic class representing a triangle in Cartesian
  * 3-Dimensional coordinate system.
@@ -33,6 +35,29 @@ public class Triangle extends Polygon {
 
     @Override
     public List<Point> findIntersections(Ray ray) {
-        return null;
+        Point p = plane.findIntersections(ray).getFirst();
+
+        Point p0 = ray.getHead();
+        Vector v = ray.getDirection();
+
+        Point p1 = vertices.get(0);
+        Point p2 = vertices.get(1);
+        Point p3 = vertices.get(2);
+
+        Vector v1 = p1.subtract(p0);
+        Vector v2 = p2.subtract(p0);
+        Vector v3 = p3.subtract(p0);
+
+        Vector n1 = v1.crossProduct(v1).normalize();
+        Vector n2 = v2.crossProduct(v3).normalize();
+        Vector n3 = v3.crossProduct(v1).normalize();
+
+
+        if(compareSign(v.dotProduct(n1), v.dotProduct(n2))
+           && compareSign(v.dotProduct(n1), v.dotProduct(n3))) {
+            return plane.findIntersections(ray);
+        } else {
+            return null;
+        }
     }
 }
