@@ -9,8 +9,7 @@ import java.util.List;
 public class Geometries implements Intersectable {
     final private LinkedList<Intersectable> geometries = new LinkedList<>();
 
-    public Geometries() {
-    }
+    public Geometries() { }
 
     public Geometries(Intersectable... geometries) {
         add(geometries);
@@ -25,6 +24,18 @@ public class Geometries implements Intersectable {
 
     @Override
     public List<Point> findIntersections(Ray ray) {
-        return null;
+        List<Point> list = null;
+        for (Intersectable g : geometries)
+        {
+            List<Point> l = g.findIntersections(ray);
+            if(l != null)
+            {
+                if (list == null){
+                    list = new LinkedList<>();
+                }
+                list.addAll(l);
+            }
+        }
+        return list;
     }
 }

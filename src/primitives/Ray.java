@@ -1,5 +1,7 @@
 package primitives;
 
+import static primitives.Util.isZero;
+
 /**
  * Class Ray is the basic class representing a ray of Euclidean geometry in Cartesian 3-Dimensional coordinate system.
  * All the points from the head of the ray in the line in the direction of the vector.
@@ -19,10 +21,7 @@ public class Ray {
      */
     public Ray(Point head, Vector direction) {
         this.head = head;
-        if (direction.length() == 1)
-            this.direction = direction;
-        else
-            this.direction = direction.normalize();
+        this.direction = direction.normalize();
     }
 
     /**
@@ -55,5 +54,13 @@ public class Ray {
                 "head=" + head +
                 ", direction=" + direction +
                 '}';
+    }
+
+    public Point getPoint(double t) {
+        if(isZero(t)) {
+            return head;
+        } else {
+            return head.add(direction.scale(t));
+        }
     }
 }

@@ -73,7 +73,7 @@ public class Plane implements Geometry {
             return null;
         }
         else {
-            list.add(head.add(direction.scale(t)));
+            list.add(ray.getPoint(t));
         }
         return list;
     }
