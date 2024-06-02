@@ -34,15 +34,15 @@ public class Sphere extends RadialGeometry {
 
     @Override
     public List<Point> findIntersections(Ray ray) {
-        Point p0 = ray.getHead();
-        Vector v = ray.getDirection();
+        Point head = ray.getHead();
+        Vector direction = ray.getDirection();
 
-        if(p0.equals(center)) {
+        if(head.equals(center)) {
             Point p = ray.getPoint(radius);
             return List.of(p);
         }
-        Vector u = center.subtract(p0);
-        double tm = alignZero(v.dotProduct(u));
+        Vector u = center.subtract(head);
+        double tm = alignZero(direction.dotProduct(u));
         double d = alignZero(Math.sqrt(u.lengthSquared() - tm * tm));
         if (d >= radius) {
             return null;

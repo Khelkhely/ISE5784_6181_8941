@@ -35,19 +35,19 @@ public class Triangle extends Polygon {
 
     @Override
     public List<Point> findIntersections(Ray ray) {
-        Point p0 = ray.getHead();
-        Vector v = ray.getDirection();
+        Point head = ray.getHead();
+        Vector direction = ray.getDirection();
 
         Point p1 = vertices.get(0);
         Point p2 = vertices.get(1);
         Point p3 = vertices.get(2);
 
-        if(p1.equals(p0) || p2.equals(p0) || p3.equals(p0)) {
+        if(p1.equals(head) || p2.equals(head) || p3.equals(head)) {
             return null;
         }
-        Vector v1 = p1.subtract(p0);
-        Vector v2 = p2.subtract(p0);
-        Vector v3 = p3.subtract(p0);
+        Vector v1 = p1.subtract(head);
+        Vector v2 = p2.subtract(head);
+        Vector v3 = p3.subtract(head);
 
 
         Vector n1 = v1.crossProduct(v2).normalize();
@@ -55,8 +55,8 @@ public class Triangle extends Polygon {
         Vector n3 = v3.crossProduct(v1).normalize();
 
 
-        if(compareSign(v.dotProduct(n1), v.dotProduct(n2))
-           && compareSign(v.dotProduct(n1), v.dotProduct(n3))) {
+        if(compareSign(direction.dotProduct(n1), direction.dotProduct(n2))
+           && compareSign(direction.dotProduct(n1), direction.dotProduct(n3))) {
             return plane.findIntersections(ray);
         } else {
             return null;

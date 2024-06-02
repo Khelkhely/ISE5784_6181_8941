@@ -56,6 +56,11 @@ public class Ray {
                 '}';
     }
 
+    /**
+     * calculates the point on the ray that is a distance of t from the head of the ray in its direction
+     * @param t the distance from the head of the ray to the desired point
+     * @return a point on the ray that is a distance of t from the head of the ray
+     */
     public Point getPoint(double t) {
         if(isZero(t)) {
             return head;

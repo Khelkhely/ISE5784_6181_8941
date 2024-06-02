@@ -19,7 +19,8 @@ class PlaneTest {
     public void testConstructor() {
         // ============ Equivalence Partitions Tests ==============
         // TC01: Test construct a correct plane
-        assertDoesNotThrow(() -> new Plane(new Point(1,0,0),
+        assertDoesNotThrow(() -> new Plane(
+                new Point(1,0,0),
                 new Point(0,1,0),
                 new Point(-1,0,0)),
                 "ERROR: failed constructing a correct plane");
@@ -27,24 +28,18 @@ class PlaneTest {
         // =============== Boundary Values Tests ==================
         // TC11: Test that throws proper exception when first and second points are not the same
         assertThrows(IllegalArgumentException.class,
-                ()->new Plane(new Point(1,0,0),
+                ()->new Plane(
+                        new Point(1,0,0),
                         new Point(1,0,0),
                         new Point(-1,0,0)),
                 "ERROR: same first and second points does not throw a fitting exception");
         // TC12: Test that throws proper exception when points are not on the same line
         assertThrows(IllegalArgumentException.class,
-                ()->new Plane(new Point(1,0,0),
+                ()->new Plane(
+                        new Point(1,0,0),
                         new Point(0,0,0),
                         new Point(-1,0,0)),
                 "ERROR: three points on the same line does not throw a fitting exception");
-
-        /*
-        assertThrows(IllegalArgumentException.class,
-                ()->new Plane(new Point(1,2,3),
-                        new Point(2,4,6),
-                        new Point(3,6,9)),
-                "ERROR: three points on the same line does not throw a fitting exception");
-        */
     }
 
     /** Test method for {@link Plane#getNormal()} */
@@ -52,23 +47,31 @@ class PlaneTest {
     void testGetNormal() {
         // ============ Equivalence Partitions Tests ==============
         // TC01: Test that the normal we got is proper
-        Plane plane = new Plane(new Point(1,0,0),
+        Plane plane = new Plane(
+                new Point(1,0,0),
                 new Point(0,1,0),
-                new Point(-1,0,0));
+                new Point(-1,0,0)
+        );
         // generate the test result
         Vector result = plane.getNormal();
         // ensure there are no exceptions
         assertDoesNotThrow(() -> plane.getNormal(),
                 "ERROR: getNormal threw an exception");
         // ensure |result| = 1
-        assertEquals(1, result.length(), DELTA,
+        assertEquals(1,
+                result.length(),
+                DELTA,
                 "ERROR: plane's normal is not a unit vector");
-        Vector v1 = new Vector(1,0,0).subtract(new Point(0,1,0));
-        Vector v2 = new Vector(-1,0,0).subtract(new Point(0,1,0));
+        Vector vector1 = new Vector(1,0,0).subtract(new Point(0,1,0));
+        Vector vector2 = new Vector(-1,0,0).subtract(new Point(0,1,0));
         // ensure the result is orthogonal to the plane
-        assertEquals(0, result.dotProduct(v1), DELTA,
-                   "ERROR: plane's normal is not orthogonal to the plane");
-        assertEquals(0, result.dotProduct(v2), DELTA,
+        assertEquals(0,
+                result.dotProduct(vector1),
+                DELTA,
+                "ERROR: plane's normal is not orthogonal to the plane");
+        assertEquals(0,
+                result.dotProduct(vector2),
+                DELTA,
                 "ERROR: plane's normal is not orthogonal to the plane");
     }
 
@@ -77,13 +80,14 @@ class PlaneTest {
     void testTestGetNormal() {
         // ============ Equivalence Partitions Tests ==============
         // TC01: Test that the normal we got is proper
-        Plane plane = new Plane(new Point(1,0,0),
+        Plane plane = new Plane(
+                new Point(1,0,0),
                 new Point(0,1,0),
-                new Point(-1,0,0));
-        // generate the test result
-        Vector result = plane.getNormal(new Point(0, 0, 0));
+                new Point(-1,0,0)
+        );
         // Test that we got the desired result
-        assertEquals(new Vector(0,0,1), result,
+        assertEquals(new Vector(0,0,1),
+                plane.getNormal(new Point(0, 0, 0)),
                 "ERROR: it is not the desired normal");
 
     }
@@ -93,14 +97,21 @@ class PlaneTest {
      */
     @Test
     void testFindIntersections() {
-        Plane plane = new Plane(new Point(1,0,0), new Point(0,1,0), new Point(0,0,1));
-
+        Plane plane = new Plane(
+                new Point(1,0,0),
+                new Point(0,1,0),
+                new Point(0,0,1)
+        );
         // ============ Equivalence Partitions Tests ==============
         // TC01: Ray intersects the plane
-        List<Point> list = plane.findIntersections(new Ray(new Point(-5,0,0), new Vector(3,1,0)));
-        assertEquals(1, list.size(),
+        List<Point> intersections = plane.findIntersections(
+                new Ray(new Point(-5,0,0), new Vector(3,1,0)));
+
+        assertEquals(1,
+                intersections.size(),
                 "ERROR: doesn't return one intersection point");
-        assertEquals(new Point(-0.5,1.5,0), list.getFirst(),
+        assertEquals(new Point(-0.5,1.5,0),
+                intersections.getFirst(),
                 "ERROR: doesn't return the right intersection point");
 
         // TC02: Ray doesn't intersect the plane
@@ -114,27 +125,30 @@ class PlaneTest {
         // TC11: Ray is parallel to the plane
         assertNull(plane.findIntersections(new Ray(new Point(0,2,0), new Vector(1,-1,0))),
                 "ERROR: doesn't return null if ray is parallel to the plane");
+
         // TC12: Ray is on the plane
         assertNull(plane.findIntersections(new Ray(new Point(-1,2,0), new Vector(0,1,-1))),
                 "ERROR: doesn't return null if ray is on the plane");
+
         // TC13: Ray is orthogonal to the plane and starts before it
         assertEquals(p3,
                 plane.findIntersections(new Ray(new Point(0,-1,0), new Vector(1,1,1))).getFirst(),
                 "ERROR: doesn't work if the ray is orthogonal to the plane and has an intersection");
+
         // TC14: Ray is orthogonal to the plane and starts after it
         assertNull(plane.findIntersections(new Ray(new Point(1,0,1), new Vector(1,1,1))),
                 "ERROR: doesn't work if the ray is orthogonal to the plane and doesn't have an intersection");
+
         // TC15: Ray is orthogonal to the plane and starts on it
-        assertNull(plane.findIntersections(
-                new Ray(p3, new Vector(1,1,1))),
+        assertNull(plane.findIntersections(new Ray(p3, new Vector(1,1,1))),
                 "ERROR: doesn't work if the ray is orthogonal to the plane and starts at the intersection");
+
         // TC11: Ray begins on the plane
-        assertNull(plane.findIntersections(
-                new Ray (new Point (1,2,-2), new Vector(-1,-2,8))),
+        assertNull(plane.findIntersections(new Ray (new Point (1,2,-2), new Vector(-1,-2,8))),
                 "ERROR: doesn't return null if the ray starts on the plane");
+
         // TC11: Ray begins on the point that the plane is defined by
-        assertNull(plane.findIntersections(
-                        new Ray (new Point (1,0,0), new Vector(-1,-2,8))),
+        assertNull(plane.findIntersections(new Ray (new Point (1,0,0), new Vector(-1,-2,8))),
                 "ERROR: doesn't return null if the ray starts on the point the plane is defined by");
     }
 }

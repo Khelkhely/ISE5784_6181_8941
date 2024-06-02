@@ -65,16 +65,14 @@ public class Plane implements Geometry {
         if (dotProduct == 0) {
             return null;
         }
-        if (q.equals(head))
+        if (q.equals(head)) {
             return null;
+        }
         double t = alignZero(normal.dotProduct(q.subtract(head)) / dotProduct);
-        LinkedList<Point> list = new LinkedList<>();
         if (t <= 0) {
             return null;
+        } else {
+            return List.of(ray.getPoint(t));
         }
-        else {
-            list.add(ray.getPoint(t));
-        }
-        return list;
     }
 }

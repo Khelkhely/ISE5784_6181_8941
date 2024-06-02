@@ -6,7 +6,7 @@ import primitives.Ray;
 import java.util.List;
 
 /**
- * Class Intersectable is the basic class representing a geometric that is intersectable.
+ * Class Intersectable is the basic class representing a geometric or a group of geometrics that are intersectable.
  */
 public interface Intersectable {
     /**
