@@ -48,6 +48,10 @@ public class Point {
         return new Point(xyz.add(v1.xyz));
     }
 
+    public Double3 getXyz() {
+        return xyz;
+    }
+
     /**
      * calculates the squared distance between the current and parameter point
      * @param p1 the other point

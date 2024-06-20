@@ -19,8 +19,8 @@ public class Camera implements Cloneable {
     private double viewPlaneHeight = 0;
     private double viewPlaneDistance = 0;
 
-    private ImageWriter imageWriter;
-    private RayTracerBase rayTracer;
+    //private ImageWriter imageWriter;
+    //private RayTracerBase rayTracer;
 
     //private Point viewPlanePC;
 
@@ -61,7 +61,7 @@ public class Camera implements Cloneable {
             return this;
         }
 
-        public Builder setImageWriter(ImageWriter imageWriter) {
+        /*public Builder setImageWriter(ImageWriter imageWriter) {
             camera.imageWriter = imageWriter;
             return this;
         }
@@ -69,7 +69,7 @@ public class Camera implements Cloneable {
         public Builder setRayTracer(RayTracerBase tracer) {
             camera.rayTracer = tracer;
             return this;
-        }
+        }*/
 
         public Camera build() {
             String generalDescription = "Rendering data missing.";
@@ -96,19 +96,19 @@ public class Camera implements Cloneable {
                 throw new IllegalArgumentException("Vectors to and up must be orthogonal to each other.");
             }
             camera.vRight = camera.vTo.crossProduct(camera.vUp).normalize();
-            return (Camera) camera.clone();
+            return (Camera) camera; //.clone();
         }
     }
 
-    public static Builder getBuilder() {
+    /*public static Builder getBuilder() {
 
-    }
+    }*/
 
     public Ray constructRay(int nX, int nY, int j, int i) {
         return null;
     }
 
-    public double getDistance() {
+    /*public double getDistance() {
         return distance;
     }
 
@@ -118,15 +118,15 @@ public class Camera implements Cloneable {
 
     public double getWidth() {
         return width;
-    }
+    }*/
 
     public Vector getvRight() {
         return vRight;
     }
 
-    public Vector getvTp() {
+    /*public Vector getvTp() {
         return vTp;
-    }
+    }*/
 
     public Vector getvUp() {
         return vUp;

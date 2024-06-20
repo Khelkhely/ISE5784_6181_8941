@@ -6,6 +6,8 @@ import primitives.Vector;
 
 import java.util.List;
 
+import static java.lang.Math.sqrt;
+
 /**
  * Class Tube is the basic class representing a tube in Cartesian
  * 3-Dimensional coordinate system.
@@ -37,6 +39,38 @@ public class Tube extends RadialGeometry {
 
     @Override
     public List<Point> findIntersections(Ray ray) {
-        return null;
+        Vector n = ray.getDirection();
+        Point o = ray.getHead();
+        Vector a = axis.getDirection();
+        Vector b = axis.getHead().subtract(o);
+        if (a.equals(n)) {
+            return null;
+        }
+        Vector cross = n.crossProduct(a);
+        double discriminanta = cross.lengthSquared() * radius * radius;
+        double dot = b.dotProduct(cross);
+        discriminanta -= a.lengthSquared() * dot * dot;
+        if (discriminanta < 0) {
+            return null;
+        }
+        double B = cross.dotProduct(b.crossProduct(a));
+
+        if (discriminanta == 0) {
+            double d = B / cross.lengthSquared();
+            if (d <= 0) {
+                return null;
+            }
+            return List.of(ray.getPoint(d));
+        }
+        double d1 = (B + sqrt(discriminanta)) / cross.lengthSquared();
+        double d2 = (B - sqrt(discriminanta)) / cross.lengthSquared();
+        if (d1 < 0) {
+            if (d2 < 0) {
+                return null;
+            }
+            return List.of(ray.getPoint(d2));
+        }
+        return List.of(ray.getPoint(d2), ray.getPoint(d1));
     }
+
 }
