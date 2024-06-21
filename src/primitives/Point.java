@@ -48,6 +48,10 @@ public class Point {
         return new Point(xyz.add(v1.xyz));
     }
 
+    /**
+     * a get method for the three coordinates of the point
+     * @return the three coordinates of the point
+     */
     public Double3 getXyz() {
         return xyz;
     }
