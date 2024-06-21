@@ -52,8 +52,8 @@ public class Tube extends RadialGeometry {
         }
 
         Vector cross = n.crossProduct(a);
-        double twoA = cross.lengthSquared();
-        double discriminanta = twoA * radius * radius;
+        double A = cross.lengthSquared();
+        double discriminanta = A * radius * radius;
         double dot = b.dotProduct(cross);
         discriminanta -= a.lengthSquared() * dot * dot;
         if (alignZero(discriminanta) < 0) {
@@ -63,20 +63,22 @@ public class Tube extends RadialGeometry {
         double mB = cross.dotProduct(b.crossProduct(a));
 
         if (isZero(discriminanta)) {
-            double d = mB / twoA;
+            double d = mB / A;
             if (d <= 0) {
                 return null;
             }
             return List.of(ray.getPoint(d));
         }
-        double d1 = (mB + sqrt(discriminanta)) / twoA;
-        double d2 = (mB - sqrt(discriminanta)) / twoA;
+        double d1 = (mB + sqrt(discriminanta)) / A;
+        double d2 = (mB - sqrt(discriminanta)) / A;
         if (alignZero(d2) < 0) {
             if (alignZero(d1) < 0) {
                 return null;
             }
             return List.of(ray.getPoint(d1));
         }
+        if(o.equals(ray.getPoint(d2)))
+            return List.of(ray.getPoint(d1));
         //לבדוק אם הנקודה d2 נמצאת ממש על הtube
         return List.of(ray.getPoint(d2), ray.getPoint(d1));
     }
