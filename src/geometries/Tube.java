@@ -48,7 +48,7 @@ public class Tube extends RadialGeometry {
         Vector n = ray.getDirection();
         Point o = ray.getHead();
         Vector a = axis.getDirection();
-        double dot, A, mB;
+        double dot, A, B;
         if (a.isParallel(n)) { //if the ray is parallel to the tube, there are no intersections
             return null;
         }
@@ -56,14 +56,14 @@ public class Tube extends RadialGeometry {
         A = alignZero(cross.lengthSquared());
         if (o.equals(axis.getHead())) {
             dot = 0;
-            mB = 0;
+            B = 0;
         } else {
             Vector b = axis.getHead().subtract(o);
             dot = alignZero(b.dotProduct(cross));
             if (a.isParallel(b)) {
-                mB = 0;
+                B = 0;
             } else {
-                mB = alignZero(cross.dotProduct(b.crossProduct(a)));
+                B = alignZero(cross.dotProduct(b.crossProduct(a)));
             }
         }
         double discriminant = alignZero(A * radius * radius - a.lengthSquared() * dot * dot);
@@ -72,8 +72,8 @@ public class Tube extends RadialGeometry {
             return null;
         }
         double sqrt = sqrt(discriminant);
-        double d1 = (mB + sqrt) / A;
-        double d2 = (mB - sqrt) / A;
+        double d1 = (B + sqrt) / A;
+        double d2 = (B - sqrt) / A;
         if (alignZero(d2) <= 0 ) { //if the ray starts on the tube
             if (alignZero(d1) <= 0) {
                 return null;
