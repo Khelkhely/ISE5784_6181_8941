@@ -4,15 +4,11 @@ import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
 
-import static java.lang.Math.abs;
 import static primitives.Util.alignZero;
 import static primitives.Util.isZero;
 
 import java.util.List;
 import static java.lang.Math.sqrt;
-
-
-import static primitives.Util.isZero;
 
 /**
  * Class Tube is the basic class representing a tube in Cartesian
