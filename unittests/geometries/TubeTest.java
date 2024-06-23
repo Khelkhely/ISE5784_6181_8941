@@ -67,7 +67,7 @@ class TubeTest {
         list = tube.findIntersections(new Ray(new Point(1,1,1), new Vector(1,5,-2)));
         assertEquals(1,
                 list.size(),
-                "ERROR: doesn't return one intersection point");
+                "ERROR: doesn't return one intersection point 1");
         assertEquals(new Point(1.3816938138904342,2.9084690694521713,0.23661237221913145),
                 list.getFirst(),
                 "ERROR: doesn't return the right intersection point");
@@ -146,31 +146,31 @@ class TubeTest {
         list = tube.findIntersections(new Ray(new Point(1,1,1), new Vector(0,0,4)));
         assertEquals(1,
                 list.size(),
-                "ERROR: doesn't return one intersection point");
+                "ERROR: doesn't return one intersection point 2");
         assertEquals(new Point(1,1,3.0353571071357126),
                 list.getFirst(),
                 "ERROR: doesn't return the right intersection point");
         // TC11: the ray starts on the edge of the tube
-        list = tube.findIntersections(new Ray(new Point(0,4.25,0), new Vector(1,-1,1)));
+        list = tube.findIntersections(new Ray(new Point(2,-4,0), new Vector(-1,1,1)));
         assertEquals(1,
                 list.size(),
-                "ERROR: doesn't return one intersection point");
-        assertEquals(new Point(1.963527846124571,2.2864721538754287,1.963527846124571),
+                "ERROR: doesn't return one intersection point 3");
+        assertEquals(new Point(-0.6153846153846159,-1.3846153846153841,2.615384615384616),
                 list.getFirst(),
-                "ERROR: doesn't return the right intersection point");
+                "ERROR: doesn't return the right intersection point 3");
         // TC12: the ray starts on the edge of the tube and is orthogonal to the axis
-        list = tube.findIntersections(new Ray(new Point(0,4.25,0), new Vector(0,3.25,4)));
+        list = tube.findIntersections(new Ray(new Point(0.2957255409482756,-2.5213722952586224,2.408548918103449), new Vector(-1,0,0)));
         assertEquals(1,
                 list.size(),
-                "ERROR: doesn't return one intersection point");
-        assertEquals(new Point(0,3.28,3.88),
+                "ERROR: doesn't return one intersection point 4");
+        assertEquals(new Point(-0.29572554094827835,-2.5213722952586224,2.408548918103449),
                 list.getFirst(),
-                "ERROR: doesn't return the right intersection point");
+                "ERROR: doesn't return the right intersection point 4");
         // TC13: the ray intersects the axis
         list = tube.findIntersections(new Ray(new Point(1,1,1), new Vector(-1,-1,0)));
         assertEquals(1,
                 list.size(),
-                "ERROR: doesn't return one intersection point");
+                "ERROR: doesn't return one intersection point 5");
         assertEquals(new Point(-1.9436506316150997,-1.9436506316150997,1),
                 list.getFirst(),
                 "ERROR: doesn't return the right intersection point");
@@ -178,7 +178,7 @@ class TubeTest {
         list = tube.findIntersections(new Ray(new Point(-1,-1,1), new Vector(-1,-1,0)));
         assertEquals(1,
                 list.size(),
-                "ERROR: doesn't return one intersection point");
+                "ERROR: doesn't return one intersection point 6");
         assertEquals(new Point(-1.9436506316151,-1.9436506316151, 1),
                 list.getFirst(),
                 "ERROR: doesn't return the right intersection point");
@@ -186,7 +186,7 @@ class TubeTest {
         list = tube.findIntersections(new Ray(new Point(1,-2,1), new Vector(-1,0,-0.5)));
         assertEquals(1,
                 list.size(),
-                "ERROR: doesn't return one intersection point");
+                "ERROR: doesn't return one intersection point 7");
         assertEquals(new Point(-1.7994708216848743,-2.0,-0.39973541084243713),
                 list.getFirst(),
                 "ERROR: doesn't return the right intersection point");
@@ -194,15 +194,15 @@ class TubeTest {
         list = tube.findIntersections(new Ray(new Point(0,0,1), new Vector(0,0,3)));
         assertEquals(1,
                 list.size(),
-                "ERROR: doesn't return one intersection point");
-        assertEquals(new Point(0,0,3.06),
+                "ERROR: doesn't return one intersection point 8");
+        assertEquals(new Point(0,0,3.0615528128088303),
                 list.getFirst(),
                 "ERROR: doesn't return the right intersection point");
         // TC17: the ray starts on the line that the axis of the tube is on but on the other direction
         list = tube.findIntersections(new Ray(new Point(0,0,2), new Vector(0,0,1)));
         assertEquals(1,
                 list.size(),
-                "ERROR: doesn't return one intersection point");
+                "ERROR: doesn't return one intersection point 9");
         assertEquals(new Point(0,0,3.0615528128088303),
                 list.getFirst(),
                 "ERROR: doesn't return the right intersection point");
@@ -259,7 +259,7 @@ class TubeTest {
         assertNull(list,
                 "ERROR: return intersection point");
         // TC29: the ray is orthogonal to the tube
-        list = tube.findIntersections(new Ray(new Point(1,0,3.06), new Vector(-1,0,0)));
+        list = tube.findIntersections(new Ray(new Point(1,0,3.0615528128088303), new Vector(-1,0,0)));
         assertNull(list,
                 "ERROR: return intersection point");
         // TC30: the line the ray is on is tangent to the tube but the ray starts after the point of contact
@@ -275,7 +275,7 @@ class TubeTest {
         assertEquals(1,
                 list.size(),
                 "ERROR: doesn't return one intersection point");
-        assertEquals(new Point(1.26,-0.38,2.12),
+        assertEquals(new Point(1.6172150801252798,-0.3827849198747202,2.1172150801252796),
                 list.getFirst(),
                 "ERROR: doesn't return the right intersection point");
         // TC33: the ray is the same as the axis
@@ -344,7 +344,7 @@ class TubeTest {
         assertEquals(1,
                 list.size(),
                 "ERROR: doesn't return one intersection point");
-        assertEquals(new Point(-1.78,-0.11,0.03),
+        assertEquals(new Point(-1.7777777777777777,-0.11111111111111116,0.02777777777777779),
                 list.getFirst(),
                 "ERROR: doesn't return the right intersection point");
     }
