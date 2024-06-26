@@ -65,5 +65,14 @@ class CylinderTest {
         assertEquals(new Vector(0,1,0),
                 c.getNormal(new Point(1,4,0)),
                 "ERROR: normal from from the center of the second base does not work correctly");
+
+        // TC13: Test normal from the edge of the first base of the cylinder
+        assertEquals(new Vector(0,-1,0),
+                c.getNormal(new Point(3,0,0)),
+                "ERROR: normal from from the center of the first base does not work correctly");
+        // TC14: Test normal from the edge of the second base of the cylinder
+        assertEquals(new Vector(0,1,0),
+                c.getNormal(new Point(-1,4,0)),
+                "ERROR: normal from from the center of the first base does not work correctly");
     }
 }
