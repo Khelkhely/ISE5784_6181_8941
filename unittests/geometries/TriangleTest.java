@@ -48,6 +48,7 @@ class TriangleTest {
         Point p101 = new Point(1,0,1);
         Point p0d511 = new Point(0.5,1,1);
         Point p1d501 = new Point(1.5,0,1);
+        Point p0d510 = new Point(0.5,1,0);
         Vector v00m2 = new Vector(0,0,-2);
         Triangle triangle = new Triangle(p100, pm100, p020);
         List<Point> exp;
@@ -72,7 +73,7 @@ class TriangleTest {
                 "Ray on a vertex of the triangle");
 
         // TC12: Ray is on a side of the triangle (0 points)
-        assertNull(triangle.findIntersections(new Ray(p0d511, v00m2)),
+        assertNull(triangle.findIntersections(new Ray(p0d510, v00m2)),
                 "Ray on a side of the triangle");
 
         // TC13: Ray is on a side's continue (0 points)

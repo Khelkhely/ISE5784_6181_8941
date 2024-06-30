@@ -35,6 +35,10 @@ public class Triangle extends Polygon {
 
     @Override
     public List<Point> findIntersections(Ray ray) {
+        List<Point> intersections = plane.findIntersections(ray);
+        if (intersections == null) {
+            return null;
+        }
         Point head = ray.getHead();
         Vector direction = ray.getDirection();
 
@@ -57,7 +61,7 @@ public class Triangle extends Polygon {
 
         if(compareSign(direction.dotProduct(n1), direction.dotProduct(n2))
            && compareSign(direction.dotProduct(n1), direction.dotProduct(n3))) {
-            return plane.findIntersections(ray);
+            return intersections;
         } else {
             return null;
         }
