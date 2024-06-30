@@ -35,10 +35,9 @@ public class Camera implements Cloneable {
     //private Point viewPlanePC;
 
     /**
-     *
+     * private constructor for camera
      */
-    private Camera() {
-    }
+    private Camera() {}
 
     /**
      * getter function for viewPlaneDistance
@@ -101,7 +100,7 @@ public class Camera implements Cloneable {
      * @return a builder object for camera
      */
     public static Builder getBuilder() {
-        return null;
+        return new Builder();
     }
 
     /**
@@ -113,7 +112,18 @@ public class Camera implements Cloneable {
      * @return a ray that starts at the camera and goes through the specified pixel on the view plane
      */
     public Ray constructRay(int nX, int nY, int j, int i) {
-        return null;
+        Point pc = p0.add(vTo.scale(viewPlaneDistance));
+        double ry = viewPlaneHeight / nY; //height of each pixel
+        double rx = viewPlaneWidth / nX; //width of each pixel
+        double xj = (j - ((float)nX - 1) / 2) * rx;
+        double yi = -(i - ((float)nY - 1) / 2) * ry;
+        if (!isZero(xj)) {
+            pc = pc.add(vRight.scale(xj));
+        }
+        if (!isZero(yi)) {
+            pc = pc.add(vUp.scale(yi));
+        }
+        return new Ray(p0,pc.subtract(p0));
     }
 
     /**
@@ -215,12 +225,10 @@ public class Camera implements Cloneable {
                 throw new IllegalArgumentException("Plane view distance must be positive.");
             }
 
-            if (!isZero(camera.vTo.length() - 1) ||
-                    !isZero(camera.vUp.length() - 1) ||
-                    !isZero(camera.vRight.length() - 1)) {
+            if (!isZero(camera.vTo.length() - 1) || !isZero(camera.vUp.length() - 1)) {
                 throw new IllegalArgumentException("Vectors must be normalized");
             }
-            if (!isZero(camera.vRight.dotProduct(camera.vTo))) {
+            if (!isZero(camera.vUp.dotProduct(camera.vTo))) {
                 throw new IllegalArgumentException("Vectors to and up must be orthogonal to each other.");
             }
             camera.vRight = camera.vTo.crossProduct(camera.vUp).normalize();

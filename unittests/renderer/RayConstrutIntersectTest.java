@@ -31,7 +31,8 @@ public class RayConstrutIntersectTest {
         int count = 0;
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
-                List<Point> list = geometry.findIntersections(camera.constructRay(3,3,j, i));
+                Ray ray = camera.constructRay(3,3,j, i);
+                List<Point> list = geometry.findIntersections(ray);
                 if(list != null) {
                     count += list.size();
                 }
@@ -71,7 +72,7 @@ public class RayConstrutIntersectTest {
         // TC03
         Sphere sphere3 = new Sphere(2, new Point(0,0,-2));
         assertEquals(10,
-                countIntersections(sphere2, camera2),
+                countIntersections(sphere3, camera2),
                 "Number of intersection points is incorrect.");
 
         // TC04
@@ -138,7 +139,7 @@ public class RayConstrutIntersectTest {
         // TC02
         Plane plane2 = new Plane(
                 new Point(0,0,-3),
-                new Vector(0,-1,1)
+                new Vector(0,-0.5,1)
         );
         assertEquals(9,
                 countIntersections(plane2, camera),
