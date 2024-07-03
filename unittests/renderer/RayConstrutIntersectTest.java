@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import primitives.*;
 import renderer.*;
+import scene.Scene;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -48,6 +49,8 @@ public class RayConstrutIntersectTest {
                 .setVpDistance(1)
                 .setDirection(new Vector(0,0,-1), new Vector(0,1,0))
                 .setLocation(new Point(0,0,0))
+                .setImageWriter(new ImageWriter("test integration",100,100))
+                .setRayTracer(new SimpleRayTracer(new Scene("test integration")))
                 .build();
 
         // TC01
@@ -63,6 +66,8 @@ public class RayConstrutIntersectTest {
                 .setVpDistance(1)
                 .setDirection(new Vector(0,0,-1), new Vector(0,1,0))
                 .setLocation(new Point(0,0,0.5))
+                .setImageWriter(new ImageWriter("test integration",100,100))
+                .setRayTracer(new SimpleRayTracer(new Scene("test integration")))
                 .build();
         Sphere sphere2 = new Sphere(2.5, new Point(0,0,-2.5));
         assertEquals(18,
@@ -95,6 +100,8 @@ public class RayConstrutIntersectTest {
                 .setVpDistance(1)
                 .setDirection(new Vector(0,0,-1), new Vector(0,1,0))
                 .setLocation(new Point(0,0,0))
+                .setImageWriter(new ImageWriter("test integration",100,100))
+                .setRayTracer(new SimpleRayTracer(new Scene("test integration")))
                 .build();
 
         // TC01
@@ -125,6 +132,8 @@ public class RayConstrutIntersectTest {
                 .setVpDistance(1)
                 .setDirection(new Vector(0,0,-1), new Vector(0,1,0))
                 .setLocation(new Point(0,0,0))
+                .setImageWriter(new ImageWriter("test integration",100,100))
+                .setRayTracer(new SimpleRayTracer(new Scene("test integration")))
                 .build();
 
         // TC01
