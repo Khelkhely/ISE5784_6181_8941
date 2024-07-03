@@ -60,5 +60,6 @@ public class RenderTests {
          .printGrid(100, new Color(YELLOW))
          .writeToImage();
    }*/
+
 }
 
