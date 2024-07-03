@@ -1,9 +1,6 @@
 package renderer;
 
-import primitives.Point;
-import primitives.Ray;
-import primitives.Util;
-import primitives.Vector;
+import primitives.*;
 
 import java.util.MissingResourceException;
 import static primitives.Util.isZero;
@@ -28,11 +25,10 @@ public class Camera implements Cloneable {
     private double viewPlaneHeight = 0;
     /** the distance form the camera to the view plane*/
     private double viewPlaneDistance = 0;
-
-    //private ImageWriter imageWriter;
-    //private RayTracerBase rayTracer;
-
-    //private Point viewPlanePC;
+    /** the image writer item that makes the image the camera captures*/
+    private ImageWriter imageWriter;
+    /** the ray tracer that calculates the colors for each pixel by tracing the rays that come from the camera*/
+    private RayTracerBase rayTracer;
 
     /**
      * private constructor for camera
@@ -127,6 +123,57 @@ public class Camera implements Cloneable {
     }
 
     /**
+     * creates the image by coloring each pixel according to the rays cast from the camera to the scene
+     * @return the camera object
+     */
+    public Camera renderImage() {
+        for (int j = 0; j < imageWriter.getNx(); j++) {
+            for (int i = 0; i < imageWriter.getNy(); i++) {
+                castRay(imageWriter.getNx(), imageWriter.getNy(), j, i);
+            }
+        }
+        return this;
+    }
+
+    /**
+     * colors a pixel by casting a ray through it and calculating the appropriate color
+     * @param nX the number of columns on the view plane
+     * @param nY the number of rows on the view plane
+     * @param j the index of the column of the pixel on the view plane
+     * @param i the index of the row of the pixel on the view plane
+     */
+    private void castRay(int nX, int nY, int j, int i) {
+        imageWriter.writePixel(j, i, rayTracer.traceRay(constructRay(nX, nY, j, i)));
+    }
+
+    /**
+     * adds a grid to the image
+     * @param interval the size of the squares of the grid
+     * @param color the color of the grid
+     * @return the camera object
+     */
+    public Camera printGrid(int interval, Color color) {
+        for (int j = 0; j < imageWriter.getNx(); j += interval) { // write vertical lines
+            for (int i = 0; i < imageWriter.getNy(); i++) {
+                imageWriter.writePixel(j, i, color);
+            }
+        }
+        for (int i = 0; i < imageWriter.getNy(); i += interval) { // write horizontal lines
+            for (int j = 0; j < imageWriter.getNx(); j++) {
+                imageWriter.writePixel(j, i, color);
+            }
+        }
+        return this;
+    }
+
+    /**
+     * writes the image into a png file
+     */
+    public void writeToImage() {
+        imageWriter.writeToImage();
+    }
+
+    /**
      * a class of objects to construct a camera
      * @author Rachel and Tehila
      */
@@ -189,15 +236,25 @@ public class Camera implements Cloneable {
             return this;
         }
 
-        /*public Builder setImageWriter(ImageWriter imageWriter) {
+        /**
+         * a setter function for the image writer of the camera
+         * @param imageWriter the image writer of the camera
+         * @return the camera object with the updated image writer
+         */
+        public Builder setImageWriter(ImageWriter imageWriter) {
             camera.imageWriter = imageWriter;
             return this;
         }
 
+        /**
+         * a setter function for the ray tracer of the camera
+         * @param tracer the ray tracer of the camera
+         * @return the camera object with the updated ray tracer
+         */
         public Builder setRayTracer(RayTracerBase tracer) {
             camera.rayTracer = tracer;
             return this;
-        }*/
+        }
 
         /***
          * checks that all the necessary data is set for the camera and is valid, and calculates the missing data
@@ -214,6 +271,12 @@ public class Camera implements Cloneable {
             }
             if (camera.vTo == null) {
                 throw new MissingResourceException(generalDescription, className, "To vector");
+            }
+            if (camera.imageWriter == null) {
+                throw new MissingResourceException(generalDescription, className, "Image writer");
+            }
+            if (camera.rayTracer == null) {
+                throw new MissingResourceException(generalDescription, className, "Ray tracer");
             }
             if (Util.alignZero(camera.viewPlaneWidth) <= 0) {
                 throw new IllegalArgumentException("Plane view width must be positive.");

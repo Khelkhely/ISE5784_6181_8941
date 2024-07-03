@@ -10,6 +10,12 @@ import static primitives.Util.isZero;
  * @author Rachel and Tehila
  */
 public class Vector extends Point {
+    /** a static vector representing a unit vector in the direction of the X axis */
+    public static final Vector X = new Vector(1,0,0);
+    /** a static vector representing a unit vector in the direction of the Y axis */
+    public static final Vector Y = new Vector(0,1,0);
+    /** a static vector representing a unit vector in the direction of the Z axis */
+    public static final Vector Z = new Vector(0,0,1);
 
     /**
      * Constructor to initialize a vector with the three coordinates of its direction

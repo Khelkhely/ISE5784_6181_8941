@@ -2,6 +2,8 @@ package primitives;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class RayTest {
@@ -42,5 +44,38 @@ class RayTest {
         assertEquals(head,
                 ray.getPoint(0),
                 "ERROR: doesn't work if distance is zero");
+    }
+
+    /**
+     * Test method for {@link Ray#findClosestPoint(List)}
+     */
+    @Test
+    void testFindClosestPoint() {
+        Ray ray = new Ray(new Point(2,0,0), new Vector(-2,0,1));
+        Point p001 = new Point(0,0,1);
+        Point pm202 = new Point(-2,0,2);
+        Point pm403 = new Point(-4,0,3);
+        // ============ Equivalence Partitions Tests ==============
+        // TC01: point is in the middle of the list
+        List<Point> list1 = List.of(pm202, p001, pm403);
+        assertEquals(p001,
+                ray.findClosestPoint(list1),
+                "ERROR: doesn't work when point is in the middle of the list.");
+
+        // =============== Boundary Values Tests ==================
+        // TC11: the list is empty
+        assertNull(ray.findClosestPoint(List.of()),
+                "ERROR: doesn't return null when list is empty.");
+
+        // TC12: the closest point is the first on the list
+        List<Point> list2 = List.of(p001, pm403, pm202);
+        assertEquals(p001,
+                ray.findClosestPoint(list2),
+                "ERROR: doesn't work when point is in the start of the list.");
+        // TC13: the closest point is the last on the list
+        List<Point> list3 = List.of(pm202, pm403, p001);
+        assertEquals(p001,
+                ray.findClosestPoint(list3),
+                "ERROR: doesn't work when point is in the end of the list.");
     }
 }
