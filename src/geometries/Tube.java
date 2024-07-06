@@ -68,15 +68,15 @@ public class Tube extends RadialGeometry {
             return null;
         }
         double sqrt = sqrt(discriminant);
-        double d1 = (B + sqrt) / A;
-        double d2 = (B - sqrt) / A;
-        if (alignZero(d2) <= 0 ) { //if the ray starts on the tube
-            if (alignZero(d1) <= 0) {
+        double d1 = (B - sqrt) / A; //offset of the first intersection point
+        double d2 = (B + sqrt) / A; //offset of the second intersection point
+        if (alignZero(d1) <= 0 ) { //the ray starts on the tube
+            if (alignZero(d2) <= 0) {
                 return null;
             }
-            return List.of(ray.getPoint(d1));
+            return List.of(ray.getPoint(d2)); //there is only one intersection point
         }
-        return List.of(ray.getPoint(d2), ray.getPoint(d1));
+        return List.of(ray.getPoint(d1), ray.getPoint(d2));
     }
 
 }

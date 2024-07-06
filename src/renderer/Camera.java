@@ -30,6 +30,9 @@ public class Camera implements Cloneable {
     /** the ray tracer that calculates the colors for each pixel by tracing the rays that come from the camera*/
     private RayTracerBase rayTracer;
 
+    /** the point of the center of the view plane of the camera - calculate and save once instead of many times */
+    private Point pc;
+
     /**
      * private constructor for camera
      */
@@ -108,18 +111,18 @@ public class Camera implements Cloneable {
      * @return a ray that starts at the camera and goes through the specified pixel on the view plane
      */
     public Ray constructRay(int nX, int nY, int j, int i) {
-        Point pc = p0.add(vTo.scale(viewPlaneDistance));
+        Point center = pc; //the center of the pixel the ray goes through
         double ry = viewPlaneHeight / nY; //height of each pixel
         double rx = viewPlaneWidth / nX; //width of each pixel
-        double xj = (j - ((float)nX - 1) / 2) * rx;
-        double yi = -(i - ((float)nY - 1) / 2) * ry;
-        if (!isZero(xj)) {
-            pc = pc.add(vRight.scale(xj));
+        double xj = (j - ((float)nX - 1) / 2) * rx; //how much to move horizontally from the center of the view plane
+        double yi = -(i - ((float)nY - 1) / 2) * ry; //how much to move vertically from the center of the view plane
+        if (!isZero(xj)) { //move the point horizontally
+            center = center.add(vRight.scale(xj));
         }
-        if (!isZero(yi)) {
-            pc = pc.add(vUp.scale(yi));
+        if (!isZero(yi)) { //move the point vertically
+            center = center.add(vUp.scale(yi));
         }
-        return new Ray(p0,pc.subtract(p0));
+        return new Ray(p0,center.subtract(p0));
     }
 
     /**
@@ -167,7 +170,7 @@ public class Camera implements Cloneable {
     }
 
     /**
-     * writes the image into a png file
+     * writes the image the camera captures into a png file
      */
     public void writeToImage() {
         imageWriter.writeToImage();
@@ -295,6 +298,7 @@ public class Camera implements Cloneable {
                 throw new IllegalArgumentException("Vectors to and up must be orthogonal to each other.");
             }
             camera.vRight = camera.vTo.crossProduct(camera.vUp).normalize();
+            camera.pc = camera.p0.add(camera.vTo.scale(camera.viewPlaneDistance));
 
             try{
                 return (Camera) camera.clone();
