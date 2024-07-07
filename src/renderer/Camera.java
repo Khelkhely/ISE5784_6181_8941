@@ -30,7 +30,7 @@ public class Camera implements Cloneable {
     /** the ray tracer that calculates the colors for each pixel by tracing the rays that come from the camera*/
     private RayTracerBase rayTracer;
 
-    /** the point of the center of the view plane of the camera - calculate and save once instead of many times */
+    /** the point of the center of the view plane of the camera - to calculate and save once instead of many times */
     private Point pc;
 
     /**
@@ -130,9 +130,12 @@ public class Camera implements Cloneable {
      * @return the camera object
      */
     public Camera renderImage() {
-        for (int j = 0; j < imageWriter.getNx(); j++) {
-            for (int i = 0; i < imageWriter.getNy(); i++) {
-                castRay(imageWriter.getNx(), imageWriter.getNy(), j, i);
+        int nx = imageWriter.getNx();
+        int ny = imageWriter.getNy();
+
+        for (int j = 0; j < nx; j++) {
+            for (int i = 0; i < ny; i++) {
+                castRay(nx, ny, j, i);
             }
         }
         return this;
@@ -146,7 +149,9 @@ public class Camera implements Cloneable {
      * @param i the index of the row of the pixel on the view plane
      */
     private void castRay(int nX, int nY, int j, int i) {
-        imageWriter.writePixel(j, i, rayTracer.traceRay(constructRay(nX, nY, j, i)));
+        Ray ray = constructRay(nX, nY, j, i);
+        Color color = rayTracer.traceRay(ray);
+        imageWriter.writePixel(j, i, color);
     }
 
     /**

@@ -9,10 +9,8 @@ import geometries.Triangle;
 import org.junit.jupiter.api.Test;
 
 import primitives.*;
-import renderer.*;
 import scene.Scene;
 
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -26,13 +24,15 @@ public class RayConstrutIntersectTest {
      * a camera to a 3x3 view plane
      * @param geometry the geometry that the rays intersect
      * @param camera the camera the rays are cast from
+     * @param nX
+     * @param nY
      * @return the number of intersections
      */
-    int countIntersections(Intersectable geometry, Camera camera) {
+    int countIntersections(Intersectable geometry, Camera camera, int nX, int nY) {
         int count = 0;
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                Ray ray = camera.constructRay(3,3,j, i);
+        for (int i = 0; i < nX; i++) {
+            for (int j = 0; j < nY; j++) {
+                Ray ray = camera.constructRay(nX, nY,j, i);
                 List<Point> list = geometry.findIntersections(ray);
                 if(list != null) {
                     count += list.size();
@@ -57,7 +57,7 @@ public class RayConstrutIntersectTest {
         Sphere sphere1 = new Sphere(1, new Point(0,0,-3));
 
         assertEquals(2,
-                countIntersections(sphere1, camera1),
+                countIntersections(sphere1, camera1, 3, 3),
                 "Number of intersection points is incorrect.");
 
         // TC02
@@ -71,25 +71,25 @@ public class RayConstrutIntersectTest {
                 .build();
         Sphere sphere2 = new Sphere(2.5, new Point(0,0,-2.5));
         assertEquals(18,
-                countIntersections(sphere2, camera2),
+                countIntersections(sphere2, camera2, 3, 3),
                 "Number of intersection points is incorrect.");
 
         // TC03
         Sphere sphere3 = new Sphere(2, new Point(0,0,-2));
         assertEquals(10,
-                countIntersections(sphere3, camera2),
+                countIntersections(sphere3, camera2, 3, 3),
                 "Number of intersection points is incorrect.");
 
         // TC04
         Sphere sphere4 = new Sphere(4, new Point(0,0,-2));
         assertEquals(9,
-                countIntersections(sphere4, camera2),
+                countIntersections(sphere4, camera2, 3, 3),
                 "Number of intersection points is incorrect.");
 
         // TC05
         Sphere sphere5 = new Sphere(0.5, new Point(0,0,1));
         assertEquals(0,
-                countIntersections(sphere5, camera1),
+                countIntersections(sphere5, camera1, 3, 3),
                 "Number of intersection points is incorrect.");
     }
 
@@ -111,7 +111,7 @@ public class RayConstrutIntersectTest {
                 new Point(-1,-1,-2)
         );
         assertEquals(1,
-                countIntersections(triangle1, camera),
+                countIntersections(triangle1, camera, 3, 3),
                 "Number of intersection points is incorrect.");
 
         // TC02
@@ -121,7 +121,7 @@ public class RayConstrutIntersectTest {
                 new Point(-1,-1,-2)
         );
         assertEquals(2,
-                countIntersections(triangle2, camera),
+                countIntersections(triangle2, camera, 3, 3),
                 "Number of intersection points is incorrect.");
     }
 
@@ -142,7 +142,7 @@ public class RayConstrutIntersectTest {
           new Vector(0,0,1)
         );
         assertEquals(9,
-                countIntersections(plane1, camera),
+                countIntersections(plane1, camera, 3, 3),
                 "Number of intersection points is incorrect.");
 
         // TC02
@@ -151,7 +151,7 @@ public class RayConstrutIntersectTest {
                 new Vector(0,-0.5,1)
         );
         assertEquals(9,
-                countIntersections(plane2, camera),
+                countIntersections(plane2, camera, 3, 3),
                 "Number of intersection points is incorrect.");
 
         // TC03
@@ -160,7 +160,7 @@ public class RayConstrutIntersectTest {
                 new Vector(0,-9,1)
         );
         assertEquals(6,
-                countIntersections(plane3, camera),
+                countIntersections(plane3, camera, 3, 3),
                 "Number of intersection points is incorrect.");
 
     }
