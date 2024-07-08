@@ -34,7 +34,7 @@ class TriangleTest {
     }
 
     /**
-     * Test method for {@link Triangle#findIntersections(Ray)}.
+     * Test method for {@link Intersectable#findIntersections(Ray)}.
      */
     @Test
     void testFindIntersections() {

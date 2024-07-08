@@ -4,18 +4,16 @@ import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import static primitives.Util.alignZero;
-import static primitives.Util.isZero;
 
 /**
  * Class Plane is the basic class representing a plane in Cartesian
  * 3-Dimensional coordinate system.
  * @author Rachel and Tehila
  */
-public class Plane implements Geometry {
+public class Plane extends Geometry {
     /** a point on the plane */
     private final Point q;
     /** a normal (vertical) vector to the plane */
@@ -58,7 +56,7 @@ public class Plane implements Geometry {
     }
 
     @Override
-    public List<Point> findIntersections(Ray ray) {
+    public List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {
         Vector direction = ray.getDirection();
         Point head = ray.getHead();
         double dotProduct = alignZero(direction.dotProduct(normal));
@@ -72,7 +70,7 @@ public class Plane implements Geometry {
         if (t <= 0) {
             return null;
         } else {
-            return List.of(ray.getPoint(t));
+            return List.of(new GeoPoint(this, ray.getPoint(t)));
         }
     }
 }

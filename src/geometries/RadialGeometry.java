@@ -8,7 +8,7 @@ import primitives.Vector;
  * in Cartesian 3-Dimensional coordinate system.
  * @author Rachel and Tehila
  */
-public abstract class RadialGeometry implements Geometry {
+public abstract class RadialGeometry extends Geometry {
     /** the radius of the radial geometry */
     protected final double radius;
 

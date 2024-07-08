@@ -7,6 +7,7 @@ import primitives.Vector;
 import java.util.List;
 
 import static primitives.Util.compareSign;
+import static primitives.Util.isZero;
 
 /**
  * Class Triangle is the basic class representing a triangle in Cartesian
@@ -34,7 +35,7 @@ public class Triangle extends Polygon {
     }
 
     @Override
-    public List<Point> findIntersections(Ray ray) {
+    public List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {
         List<Point> intersections = plane.findIntersections(ray);
         if (intersections == null) {
             return null;
@@ -46,24 +47,27 @@ public class Triangle extends Polygon {
         Point p2 = vertices.get(1);
         Point p3 = vertices.get(2);
 
-        if(p1.equals(head) || p2.equals(head) || p3.equals(head)) {
-            return null;
-        }
         Vector v1 = p1.subtract(head);
         Vector v2 = p2.subtract(head);
         Vector v3 = p3.subtract(head);
-
 
         Vector n1 = v1.crossProduct(v2).normalize();
         Vector n2 = v2.crossProduct(v3).normalize();
         Vector n3 = v3.crossProduct(v1).normalize();
 
-
-        if(compareSign(direction.dotProduct(n1), direction.dotProduct(n2))
-           && compareSign(direction.dotProduct(n1), direction.dotProduct(n3))) {
-            return intersections;
+        double dotProduct1 = direction.dotProduct(n1);
+        double dotProduct2 = direction.dotProduct(n2);
+        double dotProduct3 = direction.dotProduct(n3);
+        if(isZero(dotProduct1) || isZero(dotProduct2) || isZero(dotProduct3)) {
+            return null;
+        }
+        if ((dotProduct1 > 0 && dotProduct2 > 0 && dotProduct3 > 0)
+                || (dotProduct1 < 0 && dotProduct2 < 0 && dotProduct3 < 0)) {
+            return List.of(new GeoPoint(this, intersections.getFirst()));
         } else {
             return null;
         }
+
+
     }
 }

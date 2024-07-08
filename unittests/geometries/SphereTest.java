@@ -34,7 +34,7 @@ class SphereTest {
     }
 
     /**
-     * Test method for {@link Sphere#findIntersections(Ray)}.
+     * Test method for {@link Intersectable#findIntersections(Ray)}.
      */
     @Test
     public void testFindIntersections() {

@@ -43,7 +43,7 @@ class TubeTest {
     }
 
     /**
-     * Test method for {@link Tube#findIntersections(Ray)}
+     * Test method for {@link Intersectable#findIntersections(Ray)}
      */
     @Test
     void testFindIntersections() {

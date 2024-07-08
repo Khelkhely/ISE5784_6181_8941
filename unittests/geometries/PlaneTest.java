@@ -93,7 +93,7 @@ class PlaneTest {
     }
 
     /**
-     * Test method for {@link Plane#findIntersections(Ray)}
+     * Test method for {@link Intersectable#findIntersections(Ray)}
      */
     @Test
     void testFindIntersections() {
@@ -104,7 +104,7 @@ class PlaneTest {
         );
         // ============ Equivalence Partitions Tests ==============
         // TC01: Ray intersects the plane
-        List<Point> intersections = plane.findIntersections(
+        List<Point> intersections = plane.findIntersections (
                 new Ray(new Point(-5,0,0), new Vector(3,1,0)));
 
         assertEquals(1,
