@@ -187,6 +187,7 @@ public class Camera implements Cloneable {
      */
     public static class Builder {
         final private Camera camera = new Camera();
+        private Point pTo = null;
 
         /**
          * setter function for camera location
@@ -210,6 +211,19 @@ public class Camera implements Cloneable {
                 throw new IllegalArgumentException("Vectors to and up must be orthogonal to each other.");
             }
             camera.vTo = to.normalize();
+            camera.vUp = up.normalize();
+            return this;
+        }
+
+        /**
+         * a setter function for the direction of the camera, using a point instead of a vTo vector
+         * @param toPoint the point the camera will face in its direction
+         * @param up the vector that represents the up direction of the camera
+         * @return the camera object with the updated direction vectors
+         */
+        public Builder setDirection(Point toPoint, Vector up) {
+            pTo = toPoint;
+            camera.vTo = null;
             camera.vUp = up.normalize();
             return this;
         }
@@ -278,7 +292,11 @@ public class Camera implements Cloneable {
                 throw new MissingResourceException(generalDescription, className, "Up vector");
             }
             if (camera.vTo == null) {
-                throw new MissingResourceException(generalDescription, className, "To vector");
+                if (pTo != null) { // if a direction point was given, calculate vTo here
+                    camera.vTo = pTo.subtract(camera.p0).normalize();
+                } else { // no direction was given in any form
+                    throw new MissingResourceException(generalDescription, className, "To vector");
+                }
             }
             if (camera.imageWriter == null) {
                 throw new MissingResourceException(generalDescription, className, "Image writer");

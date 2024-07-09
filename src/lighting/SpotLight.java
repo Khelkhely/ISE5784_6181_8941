@@ -4,6 +4,10 @@ import primitives.Color;
 import primitives.Point;
 import primitives.Vector;
 
+import static java.lang.Math.*;
+import static primitives.Util.alignZero;
+import static primitives.Util.isZero;
+
 /**
  * SpotLight class represents a spotlight source in the scene - the light comes from one point to a specific direction.
  * @author Rachel and Tehila
@@ -43,10 +47,8 @@ public class SpotLight extends PointLight {
 
     @Override
     public Color getIntensity(Point p) {
-        double dotProduct = direction.normalize().dotProduct(getL(p).normalize());
-        if (dotProduct < 0) {
-            dotProduct = 0;
-        }
+        double dotProduct = alignZero(direction.normalize().dotProduct(getL(p).normalize()));
+        dotProduct = max(dotProduct, 0);
         return super.getIntensity(p).scale(dotProduct);
     }
 }
