@@ -59,11 +59,4 @@ class GeometriesTest {
                 "ERROR: doesn't work when all the geometries intersect the ray");
     }
 
-    /**
-     * Test method for {@link Geometries#findGeoIntersections(Ray, double)}
-     */
-    @Test
-    void testFindGeoIntersections() {
-
-    }
 }

@@ -70,19 +70,18 @@ public class Tube extends RadialGeometry {
         double sqrt = sqrt(discriminant);
         double d1 = alignZero((B - sqrt) / A); //offset of the first intersection point
         double d2 = alignZero((B + sqrt) / A); //offset of the second intersection point
-        if ((alignZero(d2 - maxDistance) > 0 || d2 <= 0) &&
-                (alignZero(d1 - maxDistance) > 0 || d1 <= 0)) {
-            return null;
-        } else {
-            if ((alignZero(d2 - maxDistance) > 0 || d2 <= 0) &&
-                    !(alignZero(d1 - maxDistance) > 0 || d1 <= 0)) {
+
+        if ((alignZero(d2 - maxDistance) > 0 || d2 <= 0))
+        {
+            if((alignZero(d1 - maxDistance) > 0 || d1 <= 0)) {
+                return null;
+            } else {
                 return List.of(new GeoPoint(this, ray.getPoint(d1)));
             }
-            if (!(alignZero(d2 - maxDistance) > 0 || d2 <= 0) &&
-                    (alignZero(d1 - maxDistance) > 0 || d1 <= 0)) {
-                return List.of(new GeoPoint(this, ray.getPoint(d2)));
-            }
+        } else if((alignZero(d1 - maxDistance) > 0 || d1 <= 0)) {
+            return List.of(new GeoPoint(this, ray.getPoint(d2)));
         }
+
         return List.of(
                 new GeoPoint(this, ray.getPoint(d1)),
                 new GeoPoint(this, ray.getPoint(d2))

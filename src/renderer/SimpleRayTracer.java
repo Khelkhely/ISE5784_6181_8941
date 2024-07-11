@@ -43,8 +43,8 @@ public class SimpleRayTracer extends RayTracerBase {
      * @return the color of the GeoPoint received
      */
     private Color calcColor(GeoPoint gp, Ray ray) {
-        return scene.ambientLight.getIntensity()
-                .add(calcColor(gp, ray, MAX_CALC_COLOR_LEVEL, INITIAL_K));
+        return calcColor(gp, ray, MAX_CALC_COLOR_LEVEL, INITIAL_K)
+                .add(scene.ambientLight.getIntensity());
     }
 
     /**
@@ -181,8 +181,7 @@ public class SimpleRayTracer extends RayTracerBase {
     }
 
     /**
-     * checks if the geoPoint needs to be shaded from the light source because there is another geometry in the way
-     *
+     * checks if the geoPoint needs to be shaded from the light source because there is another geometry in the way.
      * @param gp the point
      * @param l  the vector between the light source and the point
      * @param n  the normal of the geometry the point is on at the point
@@ -197,6 +196,7 @@ public class SimpleRayTracer extends RayTracerBase {
             return true;
         for (GeoPoint geoPoint : intersections) {
             if (geoPoint.geometry.getMaterial().kT.equals(Double3.ZERO)) {
+                // if there is a geometry between the gp and the light source that isn't transparent
                 return false;
             }
         }

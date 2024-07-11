@@ -37,7 +37,7 @@ public class Ray {
      * @param normal the normal of the geometry in the point of intersection.
      */
     public Ray(Point head, Vector direction, Vector normal) {
-        this.head = head.add(normal.scale(normal.dotProduct(direction) < 0 ? DELTA : -DELTA));
+        this.head = head.add(normal.scale(normal.dotProduct(direction) > 0 ? DELTA : -DELTA));
         this.direction = direction.normalize();
     }
 
