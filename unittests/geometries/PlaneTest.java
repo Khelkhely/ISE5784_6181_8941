@@ -151,4 +151,33 @@ class PlaneTest {
         assertNull(plane.findIntersections(new Ray (new Point (1,0,0), new Vector(-1,-2,8))),
                 "ERROR: doesn't return null if the ray starts on the point the plane is defined by");
     }
+
+    /**
+     * Test method for {@link Plane#findGeoIntersections(Ray, double)}
+     */
+    @Test
+    void testFindGeoIntersections() {
+        Plane plane = new Plane(
+                new Point(1,0,0),
+                new Point(0,1,0),
+                new Point(0,0,1)
+        );
+        Ray ray = new Ray(new Point(-1,0,0), new Vector(1,0,0));
+
+        // ============ Equivalence Partitions Tests ==============
+        // TC01: intersection is further away than the max distance
+        assertNull(plane.findGeoIntersections(ray,1),
+                "ERROR: doesn't return null if the point is further away than the max distance");
+
+        // TC02: intersection is closer than the max distance
+        assertEquals(1,
+                plane.findGeoIntersections(ray,3).size(),
+                "ERROR: doesn't return the an intersection point if the point is closer than the max distance");
+
+        // =============== Boundary Values Tests ==================
+        // TC03: intersection is at the distance of the max distance
+        assertEquals(1,
+                plane.findGeoIntersections(ray,2).size(),
+                "ERROR: doesn't return the an intersection point if the distance is the max distance");
+    }
 }

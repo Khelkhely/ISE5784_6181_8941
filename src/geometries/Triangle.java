@@ -6,7 +6,6 @@ import primitives.Vector;
 
 import java.util.List;
 
-import static primitives.Util.compareSign;
 import static primitives.Util.isZero;
 
 /**
@@ -35,8 +34,8 @@ public class Triangle extends Polygon {
     }
 
     @Override
-    public List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {
-        List<Point> intersections = plane.findIntersections(ray);
+    public List<GeoPoint> findGeoIntersectionsHelper(Ray ray, double maxDistance) {
+        List<GeoPoint> intersections = plane.findGeoIntersections(ray, maxDistance);
         if (intersections == null) {
             return null;
         }
@@ -63,7 +62,7 @@ public class Triangle extends Polygon {
         }
         if ((dotProduct1 > 0 && dotProduct2 > 0 && dotProduct3 > 0)
                 || (dotProduct1 < 0 && dotProduct2 < 0 && dotProduct3 < 0)) {
-            return List.of(new GeoPoint(this, intersections.getFirst()));
+            return List.of(new GeoPoint(this, intersections.getFirst().point));
         } else {
             return null;
         }

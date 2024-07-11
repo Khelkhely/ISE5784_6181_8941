@@ -80,4 +80,33 @@ class TriangleTest {
                 "Ray on a side's continue");
 
     }
+
+    /**
+     * Test method for {@link Triangle#findGeoIntersections(Ray, double)}
+     */
+    @Test
+    void testFindGeoIntersections() {
+        Triangle triangle = new Triangle(
+                new Point(1,-1,-1),
+                new Point(1,1,-1),
+                new Point(1,0,1)
+        );
+        Ray ray = new Ray(new Point(-1,0,0), new Vector(1,0,0));
+
+        // ============ Equivalence Partitions Tests ==============
+        // TC01: intersection is further away than the max distance
+        assertNull(triangle.findGeoIntersections(ray,1),
+                "ERROR: doesn't return null if the point is further away than the max distance");
+
+        // TC02: intersection is closer than the max distance
+        assertEquals(1,
+                triangle.findGeoIntersections(ray,3).size(),
+                "ERROR: doesn't return the an intersection point if the point is closer than the max distance");
+
+        // =============== Boundary Values Tests ==================
+        // TC03: intersection is at the distance of the max distance
+        assertEquals(1,
+                triangle.findGeoIntersections(ray,2).size(),
+                "ERROR: doesn't return the an intersection point if the distance is the max distance");
+    }
 }

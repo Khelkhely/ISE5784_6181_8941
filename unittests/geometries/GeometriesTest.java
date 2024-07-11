@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 class GeometriesTest {
 
     /**
-     * Test method for {@link Intersectable#findGeoIntersectionsHelper(Ray)}
+     * Test method for {@link Intersectable#findIntersections(Ray)}
      */
     @Test
     void testFindIntersections() {
@@ -35,27 +35,35 @@ class GeometriesTest {
         // ============ Equivalence Partitions Tests ==============
         // TC01: some of the geometries intersect the ray
         assertEquals(3,
-                geometries.findGeoIntersectionsHelper(ray1).size(),
+                geometries.findIntersections(ray1).size(),
                 "ERROR: doesn't work when some of the geometries intersect the ray");
 
 
         // =============== Boundary Values Tests ==================
         // TC11: geometries is an empty list
-        assertNull(empty.findGeoIntersectionsHelper(ray1),
+        assertNull(empty.findIntersections(ray1),
                 "ERROR: doesn't work when some of the geometries intersect the ray");
 
         // TC12: none of the geometries intersect the ray
-        assertNull(geometries.findGeoIntersectionsHelper(ray2),
+        assertNull(geometries.findIntersections(ray2),
                 "ERROR: doesn't work when none of the geometries intersect the ray");
 
         // TC12: only one of the geometries intersects the ray
         assertEquals(1,
-                geometries.findGeoIntersectionsHelper(ray3).size(),
+                geometries.findIntersections(ray3).size(),
                 "ERROR: doesn't work when only one of the geometries intersect the ray");
 
         // TC12: all the geometries intersect the ray
         assertEquals(4,
-                geometries.findGeoIntersectionsHelper(ray4).size(),
+                geometries.findIntersections(ray4).size(),
                 "ERROR: doesn't work when all the geometries intersect the ray");
+    }
+
+    /**
+     * Test method for {@link Geometries#findGeoIntersections(Ray, double)}
+     */
+    @Test
+    void testFindGeoIntersections() {
+
     }
 }

@@ -185,4 +185,37 @@ class SphereTest {
                 result,
                 "Ray's line is inside and orthogonal");
     }
+
+    /**
+     * Test method for {@link Sphere#findGeoIntersections(Ray, double)}
+     */
+    @Test
+    void testFindGeoIntersections() {
+        Sphere sphere = new Sphere(1d, new Point(2,0,0));
+        Ray ray = new Ray(new Point(-1,0,0), new Vector(1,0,0));
+
+        // ============ Equivalence Partitions Tests ==============
+        // TC01: intersection points are further away than the max distance
+        assertNull(sphere.findGeoIntersections(ray,1),
+                "ERROR: returns intersections when both point are further away");
+        // TC02: only one of the intersection points is further away than the max distance
+        assertEquals(1,
+                sphere.findGeoIntersections(ray,3).size(),
+        "ERROR: doesn't return only one intersection point if one is further away");
+        // TC03: intersection points are closer than the max distance
+        assertEquals(2,
+                sphere.findGeoIntersections(ray,5).size(),
+                "ERROR: doesn't return two intersection points if both are close enough");
+
+
+        // =============== Boundary Values Tests ==================
+        // TC04: the distance from the first point is exactly the max distance
+        assertEquals(1,
+                sphere.findGeoIntersections(ray,2).size(),
+                "ERROR: doesn't return only one intersection point if the distance from the first point is the max distance");
+        // TC05: the distance from the second point is exactly the max distance
+        assertEquals(2,
+                sphere.findGeoIntersections(ray,4).size(),
+                "ERROR: doesn't return only one intersection point if the distance from the second point is the max distance");
+    }
 }
