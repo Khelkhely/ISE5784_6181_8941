@@ -16,6 +16,8 @@ public class Ray {
     private final Point head;
     /** a normalized vector that represents the direction of the ray */
     private final Vector direction;
+    /** a Delta value for moving rays forwards for constructing secondary rays */
+    private static final double DELTA = 0.1;
 
     /**
      * a constructor to initialize a ray with a point and a vector.
@@ -25,6 +27,17 @@ public class Ray {
      */
     public Ray(Point head, Vector direction) {
         this.head = head;
+        this.direction = direction.normalize();
+    }
+
+    /**
+     * a constructor to create a secondary ray in order to ensure that it does not intersect the geometry is started on.
+     * @param head the point that was supposed to be the head of the ray.
+     * @param direction a vector representing the direction of the ray. (doesn't need to be normalized)
+     * @param normal the normal of the geometry in the point of intersection.
+     */
+    public Ray(Point head, Vector direction, Vector normal) {
+        this.head = head.add(normal.scale(normal.dotProduct(direction) < 0 ? DELTA : -DELTA));
         this.direction = direction.normalize();
     }
 

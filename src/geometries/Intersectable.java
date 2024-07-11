@@ -87,6 +87,4 @@ public abstract class Intersectable {
     protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray, double maxDistance) {
         return null;
     }
-
-
 }
