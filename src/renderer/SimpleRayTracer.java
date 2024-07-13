@@ -54,7 +54,7 @@ public class SimpleRayTracer extends RayTracerBase {
      * @return the color of the GeoPoint received
      */
     private Color calcColor(GeoPoint gp, Ray ray, int level, Double3 k) {
-        Color color = calcLocalEffects(gp, ray);
+        Color color = calcLocalEffects(gp, ray, k);
         return 1 == level ? color : color.add(calcGlobalEffects(gp, ray, level, k));
     }
 
@@ -132,7 +132,7 @@ public class SimpleRayTracer extends RayTracerBase {
      * @param ray the ray from the camera to the point
      * @return the color of the local effects of the light on the point
      */
-    private Color calcLocalEffects(GeoPoint geoPoint, Ray ray) {
+    private Color calcLocalEffects(GeoPoint geoPoint, Ray ray, Double3 k) {
         Vector n = geoPoint.geometry.getNormal(geoPoint.point);
         Vector v = ray.getDirection();
         double nv = alignZero(n.dotProduct(v));
@@ -145,11 +145,14 @@ public class SimpleRayTracer extends RayTracerBase {
         for (LightSource lightSource : scene.lights) {
             Vector l = lightSource.getL(geoPoint.point);
             double nl = alignZero(n.dotProduct(l));
-            if (nl * nv > 0 && unshaded(geoPoint, l, n, nl, lightSource)) { // sign(nl) == sing(nv)
-                Color iL = lightSource.getIntensity(geoPoint.point);
-                color = color.add(
-                        iL.scale(calcDiffusive(material, nl)
-                                .add(calcSpecular(material, n, l, nl, v))));
+            if (nl * nv > 0) { // sign(nl) == sing(nv)
+                Double3 ktr = transparency(geoPoint, lightSource, l, n);
+                if (!ktr.product(k).lowerThan(MIN_CALC_COLOR_K)) {
+                    Color iL = lightSource.getIntensity(geoPoint.point).scale(ktr);
+                    color = color.add(
+                            iL.scale(calcDiffusive(material, nl)
+                                    .add(calcSpecular(material, n, l, nl, v))));
+                }
             }
         }
         return color;
@@ -201,5 +204,27 @@ public class SimpleRayTracer extends RayTracerBase {
             }
         }
         return true;
+    }
+
+    /**
+     * calculates the transparency of all the intersection points between the light source and the geoPoint
+     * and return how much from the light should affect to the point.
+     * @param gp the point
+     * @param ls the light source
+     * @param l  the vector between the light source and the point
+     * @param n  the normal of the geometry the point is on at the point
+     * @return a Double3 that representing how much from the light should affect to the point.
+     */
+    private Double3 transparency(GeoPoint gp, LightSource ls, Vector l, Vector n) {
+        Vector lightDirection = l.scale(-1); // from point to light source
+        Ray ray = new Ray(gp.point, lightDirection, n);
+        List<GeoPoint> intersections = scene.geometries.findGeoIntersections(ray, ls.getDistance(gp.point));
+        Double3 ktr = Double3.ONE;
+        if (intersections == null)
+            return ktr;
+        for (GeoPoint geoPoint : intersections) {
+            ktr = ktr.product(geoPoint.geometry.getMaterial().kT);
+        }
+        return ktr;
     }
 }
