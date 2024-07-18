@@ -124,88 +124,104 @@ public class ShadowTests {
          .writeToImage();
    }
 
-   /** experimenting with making an image */
    @Test
-   public void tempTest() {
-      Scene scene = new Scene("glass pyramid");
-      Camera.Builder camBuild = Camera.getBuilder()
-              .setImageWriter(new ImageWriter("tmp",800,800))
-              .setRayTracer(new SimpleRayTracer(scene))
-              .setVpSize(5,5)
-              .setVpDistance(10);
+   public void stage7Test() {
+      Scene scene = new Scene("memory balls");
 
-      Point camLocation = new Point(15, 15, 10);
+      Material ballMaterial = new Material().setKs(0.5).setKd(0.5).setShininess(20);
+      Material wallMaterial = new Material().setKs(0.5).setKd(0.5).setShininess(10).setKr(0.5);
+      Material clearGlass = new Material().setKt(0.7).setShininess(30).setKs(0.7).setKd(0.3);
+      Color lightColor = new Color(180,132,120);
+      Color tube = new Color(0,0,10);
+      Color gold = new Color(100, 75, 0);
+      Color red = new Color(175, 0, 0);
+      Color blue = new Color(0, 0, 175);
+      Color green = new Color(0, 100, 75);
+      Color purple = new Color(20, 0, 45);
 
-      //Material mirror = new Material().setKs(0.6).setKd(0.4).setShininess(50).setKr(1);
-      Material ball = new Material().setKs(0.6).setKd(0.4).setShininess(20).setKr(0.2);
-      Material wallMaterial = new Material().setKs(0.5).setKd(0.5).setShininess(30).setKr(0.2);
-      Material clearGlass = new Material().setKt(0.95).setShininess(30).setKs(0.6).setKd(0.4);
+      Point center1 = new Point(-8.2,0,2.5);
+      Point center2 = new Point(-7,0,-2.5);
+      Ray axis1 = new Ray(center1, Vector.X);
+      Ray axis2 = new Ray(center2, Vector.X);
+      Geometry tube1 = new Tube(2.2, axis1).setMaterial(clearGlass).setEmission(tube);
+      Geometry tube2 = new Tube(2.2, axis2).setMaterial(clearGlass).setEmission(tube);
+      Geometry floor = new Plane(new Point(0,0,-5.5), Vector.Z)
+              .setMaterial(wallMaterial).setEmission(purple);
+      Geometry wall = new Plane(new Point(0,-2.5,0), Vector.Y)
+              .setMaterial(ballMaterial).setEmission(purple);
+      scene.geometries.add(tube1, tube2, floor, wall);
 
-      Plane plane = new Plane(new Point(0,0,0), Vector.Z);
-      Point[] centers = new Point[3];
-      centers[0] = new Point(-6, -6, 3);
-      centers[2] = new Point(-6, -6, -2);
-      centers[1] = new Point(-8, -5.5, 8);
-      Sphere s1;
-      Ray axis;
-      Sphere s2, s3, s4, s5;
-      Tube tube;
-      Point p1,p2,p3,p4;
-      Triangle t1, t2;
-      Color gold = new Color(60, 55, 0);
-      Color purple = new Color(50, 0, 50);
-      Vector direction = new Vector(-4, 1, 0);
-      Vector normal = new Vector(1,4,0);
-      Vector offset1 = direction.scale(10).add(normal.scale(-1)).add(new Vector(0,0,-2.5));
-      Vector offset2 = direction.scale(-10).add(normal.scale(-1)).add(new Vector(0,0,-2.5));
-      for (int i = 0; i < 2; i++) {
-         axis = new Ray(centers[i], direction);
-         tube = new Tube(2.2, axis);
-         s1 = new Sphere(2, centers[i]);
-         s2 = new Sphere(2, axis.getPoint(4.5));
-         s3 = new Sphere(2, axis.getPoint(-4.5));
-         s4 = new Sphere(2, axis.getPoint(9));
-         s5 = new Sphere(2, axis.getPoint(-9));
-         p1 = centers[i].add(offset1);
-         p2 = centers[i].add(offset2);
-         p3 = p2.add(normal);
-         p4 = p1.add(normal);
-         t1 = new Triangle(p1,p2,p3);
-         t2 = new Triangle(p3,p4,p1);
-         scene.geometries.add(tube.setMaterial(clearGlass).setEmission(new Color(30,30,30)));
-         scene.geometries.add(s1.setMaterial(ball).setEmission(gold));
-         scene.geometries.add(s2.setMaterial(ball).setEmission(gold));
-         scene.geometries.add(s3.setMaterial(ball).setEmission(gold));
-         scene.geometries.add(s4.setMaterial(ball).setEmission(gold));
-         scene.geometries.add(s5.setMaterial(ball).setEmission(gold));
-         scene.geometries.add(t1.setMaterial(wallMaterial).setEmission(purple));
-         scene.geometries.add(t2.setMaterial(wallMaterial).setEmission(purple));
+      Point[] points = new Point[8];
+      points[0] = new Point(-11,-2,0.1);
+      points[1] = new Point(11,-2,0.1);
+      points[2] = new Point(11,2,0.1);
+      points[3] = new Point(-11,2,0.1);
+      points[4] = new Point(-11,-2,-0.1);
+      points[5] = new Point(11,-2,-0.1);
+      points[6] = new Point(11,2,-0.1);
+      points[7] = new Point(-11,2,-0.1);
+
+      Geometry triangle1 = new Triangle(points[0],points[1],points[2]).setMaterial(wallMaterial).setEmission(purple);
+      Geometry triangle2 = new Triangle(points[2],points[3],points[0]).setMaterial(wallMaterial).setEmission(purple);
+      Geometry triangle3 = new Triangle(points[4],points[5],points[6]).setMaterial(wallMaterial).setEmission(purple);
+      Geometry triangle4 = new Triangle(points[6],points[7],points[4]).setMaterial(wallMaterial).setEmission(purple);
+      Geometry triangle5 = new Triangle(points[3],points[2],points[6]).setMaterial(wallMaterial).setEmission(purple);
+      Geometry triangle6 = new Triangle(points[6],points[7],points[3]).setMaterial(wallMaterial).setEmission(purple);
+
+      Vector add  = new Vector(0,0,5.2);
+      for (int i = 0; i < 8; i++) {
+         points[i] = points[i].add(add);
       }
 
+      Geometry triangle1b = new Triangle(points[0],points[1],points[2]).setMaterial(wallMaterial).setEmission(purple);
+      Geometry triangle2b = new Triangle(points[2],points[3],points[0]).setMaterial(wallMaterial).setEmission(purple);
+      Geometry triangle3b = new Triangle(points[4],points[5],points[6]).setMaterial(wallMaterial).setEmission(purple);
+      Geometry triangle4b = new Triangle(points[6],points[7],points[4]).setMaterial(wallMaterial).setEmission(purple);
+      Geometry triangle5b = new Triangle(points[3],points[2],points[6]).setMaterial(wallMaterial).setEmission(purple);
+      Geometry triangle6b = new Triangle(points[6],points[7],points[3]).setMaterial(wallMaterial).setEmission(purple);
 
-      Plane wall = new Plane(centers[0].add(normal.scale(-1)),normal);
+      scene.geometries.add(triangle1,triangle2,triangle3,triangle4,triangle5,triangle6);
+      scene.geometries.add(triangle1b,triangle2b,triangle3b,triangle4b,triangle5b,triangle6b);
 
-      scene.geometries.add(plane.setMaterial(wallMaterial).setEmission(purple));
-      scene.geometries.add(wall.setMaterial(wallMaterial).setEmission(purple));
+      Geometry[] spheres1 = new Geometry[4];
+      Geometry[] spheres2 = new Geometry[4];
+      for (int i = 0; i < 4; i++) {
+         spheres1[i] = new Sphere(2, axis1.getPoint(i * 4.1))
+                 .setMaterial(ballMaterial).setEmission(gold);
+         scene.geometries.add(spheres1[i]);
+      }
+      for (int i = 0; i < 4; i++) {
+         spheres2[i] = new Sphere(2, axis2.getPoint(i * 4.1))
+                 .setMaterial(ballMaterial);
+         scene.geometries.add(spheres2[i]);
+      }
+      spheres1[0].setEmission(red);
+      spheres1[1].setEmission(gold);
+      spheres1[2].setEmission(gold);
+      spheres1[3].setEmission(green);
+      spheres2[0].setEmission(gold);
+      spheres2[1].setEmission(gold);
+      spheres2[2].setEmission(blue);
+      spheres2[3].setEmission(gold);
 
+      PointLight pl1 = new PointLight(lightColor,new Point(4,8,3));
+      PointLight pl2 = new PointLight(lightColor,new Point(-4,8,-3));
+      DirectionalLight dl = new DirectionalLight(new Color(ORANGE).scale(0.8), new Vector(0,-1,0));
 
-      Color lightColor = new Color(100, 100, 100);
-      //PointLight pl1 = new PointLight(lightColor, centers[0].add(camLocation.subtract(centers[0]).scale(0.5)));
-      //PointLight pl2 = new PointLight(lightColor, centers[2].add(camLocation.subtract(centers[0]).scale(0.5)));
-      //Point p0 = centers[0].add(Vector.Z.scale(10));
-      //scene.lights.add(pl1);
-      //scene.lights.add(pl2);
-      SpotLight sl1 = new SpotLight(lightColor,new Point(-3,0,10), new Vector(-4,-1,-3));
-      SpotLight sl2 = new SpotLight(lightColor,new Point(-3,0,8), new Vector(-1,-4,-3));
-      scene.lights.add(sl1);
-      scene.lights.add(sl2);
-      scene.ambientLight = new AmbientLight(new Color(10,10,10), 0.1);
-      scene.setBackground(Color.BLACK);
+      scene.lights.add(pl1);
+      scene.lights.add(pl2);
+      scene.lights.add(dl);
 
-      Camera cam1 = camBuild
+      Point camLocation = new Point(8,16,2);
+
+      Camera cam = Camera.getBuilder()
+              .setImageWriter(new ImageWriter("stage7final",800,800))
+              .setRayTracer(new SimpleRayTracer(scene))
+              .setVpSize(30,30)
+              .setVpDistance(40)
               .setLocation(camLocation)
-              .setDirection(centers[0], new Vector(-1,-1,6))
+              .setDirection(new Point(0,0,-1), new Vector(-1,-1,8))
               .build();
-      cam1.renderImage().writeToImage();
+      cam.renderImage().writeToImage();
    }
 }

@@ -61,7 +61,7 @@ public class SimpleRayTracer extends RayTracerBase {
     /**
      * calculates the global effects of the color of the point - the transparency and reflection
      * @param gp the geoPoint
-     * @param ray the primary ray that intersect the point
+     * @param ray the primary ray that intersects the point
      * @param level the level of the recursion
      * @param k the level of effects the color has on the image
      * @return the color of the global effects of the light on the point
@@ -75,7 +75,7 @@ public class SimpleRayTracer extends RayTracerBase {
     /**
      * calculates the reflected ray, from the point of intersection in the direction of the reflection on the geometry
      * @param geoPoint the geoPoint of intersection
-     * @param ray the ray that is reflected
+     * @param ray the primary ray to reflect
      * @return the reflected ray
      */
     private Ray constructReflectedRay(GeoPoint geoPoint, Ray ray) {
@@ -88,7 +88,7 @@ public class SimpleRayTracer extends RayTracerBase {
     /**
      * calculates the refracted ray, from the point of intersection in the direction of the refraction on the geometry
      * @param geoPoint the geoPoint of intersection
-     * @param ray the ray that is refracted
+     * @param ray the primary ray to refract
      * @return the refracted ray
      */
     private Ray constructRefractedRay(GeoPoint geoPoint, Ray ray) {
@@ -97,7 +97,7 @@ public class SimpleRayTracer extends RayTracerBase {
     }
 
     /**
-     * calculates the transparency or the reflection effects of the secondary ray
+     * calculates the transparency or the reflection effects on a point by the secondary ray that comes out of it
      * @param ray the secondary ray of the Refracted or Reflected from the primary one
      * @param kx the attenuation coefficient of the transparency/reflection of the material
      * @param level the level of the recursion
@@ -184,29 +184,6 @@ public class SimpleRayTracer extends RayTracerBase {
     }
 
     /**
-     * checks if the geoPoint needs to be shaded from the light source because there is another geometry in the way.
-     * @param gp the point
-     * @param l  the vector between the light source and the point
-     * @param n  the normal of the geometry the point is on at the point
-     * @param nl the dot product between n and l
-     * @return true if the point is lightened by the light source and false is it's shaded
-     */
-    private boolean unshaded(GeoPoint gp, Vector l, Vector n, double nl, LightSource lightSource) {
-        Vector lightDirection = l.scale(-1); // from point to light source
-        Ray ray = new Ray(gp.point, lightDirection, n);
-        List<GeoPoint> intersections = scene.geometries.findGeoIntersections(ray, lightSource.getDistance(gp.point));
-        if (intersections == null)
-            return true;
-        for (GeoPoint geoPoint : intersections) {
-            if (geoPoint.geometry.getMaterial().kT.equals(Double3.ZERO)) {
-                // if there is a geometry between the gp and the light source that isn't transparent
-                return false;
-            }
-        }
-        return true;
-    }
-
-    /**
      * calculates the transparency of all the intersection points between the light source and the geoPoint
      * and return how much from the light should affect to the point.
      * @param gp the point
@@ -216,7 +193,7 @@ public class SimpleRayTracer extends RayTracerBase {
      * @return a Double3 that representing how much from the light should affect to the point.
      */
     private Double3 transparency(GeoPoint gp, LightSource ls, Vector l, Vector n) {
-        Vector lightDirection = l.scale(-1); // from point to light source
+        Vector lightDirection = l.scale(-1); // vector from point to light source
         Ray ray = new Ray(gp.point, lightDirection, n);
         List<GeoPoint> intersections = scene.geometries.findGeoIntersections(ray, ls.getDistance(gp.point));
         Double3 ktr = Double3.ONE;
