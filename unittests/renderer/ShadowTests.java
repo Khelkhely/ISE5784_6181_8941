@@ -12,9 +12,6 @@ import lighting.SpotLight;
 import primitives.*;
 import scene.Scene;
 
-import java.util.ArrayList;
-
-
 /** Testing basic shadows
  * @author Dan */
 public class ShadowTests {
@@ -100,7 +97,7 @@ public class ShadowTests {
                            new Point(-72, -72, 50));
    }
 
-   /** Produce a picture of a two triangles lighted by a spot light with a Sphere
+   /** Produce a picture of two triangles lighted by a spotlight with a Sphere
     * producing a shading */
    @Test
    public void trianglesSphere() {
