@@ -122,7 +122,7 @@ public class ShadowTests {
          .writeToImage();
    }
 
-   /** experimenting with making an image */
+   /** experimenting with making an image *//*
    @Test
    public void tempTest() {
       Material material1 = new Material().setKs(0.5).setKd(0.5).setKt(1).setKr(0).setShininess(1);
@@ -152,7 +152,8 @@ public class ShadowTests {
               .setLocation(new Point(10,0,0))
               .setDirection(new Vector(-1,0,0), new Vector(0,0,1));
       camera.build().renderImage().writeToImage();
-   }
+   }*/
+
    @Test
    public void stage7Test() {
       Scene scene = new Scene("memory balls");
