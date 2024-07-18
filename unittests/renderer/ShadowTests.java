@@ -12,6 +12,7 @@ import lighting.SpotLight;
 import primitives.*;
 import scene.Scene;
 
+import java.util.ArrayList;
 
 
 /** Testing basic shadows
@@ -124,6 +125,37 @@ public class ShadowTests {
          .writeToImage();
    }
 
+   /** experimenting with making an image */
+   @Test
+   public void tempTest() {
+      Material material1 = new Material().setKs(0.5).setKd(0.5).setKt(1).setKr(0).setShininess(1);
+      Material material2 = new Material().setKs(0.5).setKd(0.5).setKt(1).setKr(0.5).setShininess(20);
+
+      Plane plane = new Plane(new Point(0,0,0), new Vector(1,0,0));
+      plane.setEmission(new Color(BLUE).scale(0.5))
+              .setMaterial(material1);
+
+      Sphere sphere1 = new Sphere(2, new Point(2,0,0));
+      sphere1.setEmission(new Color(WHITE))
+              .setMaterial(material2);
+      PointLight pointLight = new PointLight(new Color(YELLOW), new Point(0,2,2));
+      DirectionalLight directionalLight = new DirectionalLight(new Color(YELLOW).scale(0.3), new Vector(-1,0,0));
+      Scene scene = new Scene("plain");
+      scene.setBackground(new Color(BLACK))
+              .setAmbientLight(new AmbientLight(new Color(10,10,10), 0.1))
+              .setGeometries(new Geometries(plane, sphere1));
+      scene.lights.add(pointLight);
+      scene.lights.add(directionalLight);
+
+      Camera.Builder camera = Camera.getBuilder()
+              .setImageWriter(new ImageWriter("tmp2", 800, 800))
+              .setRayTracer(new SimpleRayTracer(scene))
+              .setVpSize(5,5)
+              .setVpDistance(5)
+              .setLocation(new Point(10,0,0))
+              .setDirection(new Vector(-1,0,0), new Vector(0,0,1));
+      camera.build().renderImage().writeToImage();
+   }
    @Test
    public void stage7Test() {
       Scene scene = new Scene("memory balls");
