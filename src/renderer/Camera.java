@@ -181,6 +181,8 @@ public class Camera implements Cloneable {
         imageWriter.writeToImage();
     }
 
+
+
     /**
      * a class of objects to construct a camera
      * @author Rachel and Tehila

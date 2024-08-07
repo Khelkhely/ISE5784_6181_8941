@@ -199,7 +199,7 @@ public class ShadowTests {
       spheres1[1].setEmission(gold);
       spheres1[2].setEmission(gold);
       spheres1[3].setEmission(green);
-      spheres2[0].setEmission(gold);
+      spheres2[0].setEmission(new Color(125,50,0));
       spheres2[1].setEmission(gold);
       spheres2[2].setEmission(blue);
       spheres2[3].setEmission(gold);
