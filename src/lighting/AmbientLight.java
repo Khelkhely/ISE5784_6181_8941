@@ -15,20 +15,20 @@ public class AmbientLight extends Light {
 
     /**
      * Constructor to initialize an ambient light with an intensity color and the attenuation coefficient.
-     * @param iA the intensity color.
+     * @param intensity the intensity color.
      * @param kA the attenuation coefficient using Double3.
      */
-    public AmbientLight(Color iA, Double3 kA) {
-        super(iA.scale(kA));
+    public AmbientLight(Color intensity, Double3 kA) {
+        super(intensity.scale(kA));
     }
 
     /**
      * Constructor to initialize an ambient light with an intensity color and the attenuation coefficient.
-     * @param iA the intensity color.
+     * @param intensity the intensity color.
      * @param kA the attenuation coefficient using double.
      */
-    public AmbientLight(Color iA, double kA) {
-        super(iA.scale(kA));
+    public AmbientLight(Color intensity, double kA) {
+        super(intensity.scale(kA));
     }
 
 }
