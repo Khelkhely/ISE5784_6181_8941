@@ -33,6 +33,9 @@ public class Camera implements Cloneable {
     /** the point of the center of the view plane of the camera - to calculate and save once instead of many times */
     private Point pc;
 
+    /** a super sampler for antialiasing */
+    private AntiAliasingSuperSampler antiAliasingSuperSampler = null;
+
     /**
      * private constructor for camera
      */
@@ -111,18 +114,24 @@ public class Camera implements Cloneable {
      * @return a ray that starts at the camera and goes through the specified pixel on the view plane
      */
     public Ray constructRay(int nX, int nY, int j, int i) {
+        Point center = getPixelCenter(nX, nY, j, i);
+        return new Ray(p0,center.subtract(p0));
+    }
+
+    //todo javadoc
+    private Point getPixelCenter(int nX, int nY, int j, int i) {
         Point center = pc; //the center of the pixel the ray goes through
         double ry = viewPlaneHeight / nY; //height of each pixel
         double rx = viewPlaneWidth / nX; //width of each pixel
-        double xj = (j - ((float)nX - 1) / 2) * rx; //how much to move horizontally from the center of the view plane
-        double yi = -(i - ((float)nY - 1) / 2) * ry; //how much to move vertically from the center of the view plane
+        double xj = (j - ((float) nX - 1) / 2) * rx; //how much to move horizontally from the center of the view plane
+        double yi = -(i - ((float) nY - 1) / 2) * ry; //how much to move vertically from the center of the view plane
         if (!isZero(xj)) { //move the point horizontally
             center = center.add(vRight.scale(xj));
         }
         if (!isZero(yi)) { //move the point vertically
             center = center.add(vUp.scale(yi));
         }
-        return new Ray(p0,center.subtract(p0));
+        return center;
     }
 
     /**
@@ -149,8 +158,14 @@ public class Camera implements Cloneable {
      * @param i the index of the row of the pixel on the view plane
      */
     private void castRay(int nX, int nY, int j, int i) {
-        Ray ray = constructRay(nX, nY, j, i);
-        Color color = rayTracer.traceRay(ray);
+        Color color;
+        if (antiAliasingSuperSampler == null) {
+            Ray ray = constructRay(nX, nY, j, i);
+            color = rayTracer.traceRay(ray);
+        } else {
+            Point pixelCenter = getPixelCenter(nX,nY,j,i);
+            color = antiAliasingSuperSampler.traceColor(p0, pixelCenter);
+        }
         imageWriter.writePixel(j, i, color);
     }
 
@@ -280,6 +295,11 @@ public class Camera implements Cloneable {
             return this;
         }
 
+        public Builder setAntiAlising(AntiAliasingSuperSampler antiAlising) {
+            camera.antiAliasingSuperSampler = antiAlising;
+            return this;
+        }
+
         /***
          * checks that all the necessary data is set for the camera and is valid, and calculates the missing data
          * @return a copy of the camera object that was built
@@ -325,6 +345,9 @@ public class Camera implements Cloneable {
             camera.vRight = camera.vTo.crossProduct(camera.vUp).normalize();
             camera.pc = camera.p0.add(camera.vTo.scale(camera.viewPlaneDistance));
 
+            if (camera.antiAliasingSuperSampler != null) {
+                (RectangleTargetArea)camera.antiAliasingSuperSampler.getTargetArea().
+            }
             try{
                 return (Camera) camera.clone();
             }

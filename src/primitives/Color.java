@@ -39,7 +39,7 @@ public class Color {
     * range 0..255 (for printed white color) or more [for lights]
     * @param rgb triad of Red/Green/Blue components
     */
-   private Color(Double3 rgb) {
+   public Color(Double3 rgb) {
       if (rgb.d1 < 0 || rgb.d2 < 0 || rgb.d3 < 0)
          throw new IllegalArgumentException("Negative color component is illegal");
       this.rgb = rgb;
@@ -61,6 +61,14 @@ public class Color {
       int ig = (int) rgb.d2;
       int ib = (int) rgb.d3;
       return new java.awt.Color(ir > 255 ? 255 : ir, ig > 255 ? 255 : ig, ib > 255 ? 255 : ib);
+   }
+
+   /**
+    * a getter method for the rgb of the color
+    * @return a Double3 of the rgb colors of the color
+    */
+   public Double3 getRgb() {
+      return rgb;
    }
 
    /**

@@ -13,6 +13,30 @@ public class Point {
     protected final Double3 xyz;
 
     /**
+     * a getter method for the X value of the point
+     * @return the X value of the point
+     */
+    public double getX() {
+        return getXyz().d1;
+    }
+
+    /**
+     * a getter method for the Y value of the point
+     * @return the Y value of the point
+     */
+    public double getY() {
+        return getXyz().d2;
+    }
+
+    /**
+     * a getter method for the Z value of the point
+     * @return the Z value of the point
+     */
+    public double getZ() {
+        return getXyz().d3;
+    }
+
+    /**
      * Constructor to initialize a point with its three coordinates
      * @param x x coordinate
      * @param y y coordinate
