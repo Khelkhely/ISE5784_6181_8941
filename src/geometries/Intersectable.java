@@ -9,6 +9,9 @@ import java.util.List;
  * Class Intersectable is the basic class representing a geometric or a group of geometrics that are intersectable.
  */
 public abstract class Intersectable {
+    /** the boundary box of the intersectable */
+    protected BoundaryBox boundaryBox = null;
+
     /**
      * Class GeoPoint is the basic class representing a point on a geometry object in Cartesian
      * 3-Dimensional coordinate system.
@@ -75,6 +78,9 @@ public abstract class Intersectable {
      * to the head than the max distance.
      */
     public final List<GeoPoint> findGeoIntersections(Ray ray, double maxDistance) {
+        if (boundaryBox != null && !boundaryBox.doesIntersect(ray)) {
+            return null;
+        }
         return findGeoIntersectionsHelper(ray, maxDistance);
     }
 
@@ -87,4 +93,6 @@ public abstract class Intersectable {
     protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray, double maxDistance) {
         return null;
     }
+
+    public abstract void calcBoundaryBox();
 }

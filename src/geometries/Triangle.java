@@ -1,11 +1,14 @@
 package geometries;
 
+import primitives.Double3;
 import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
 
 import java.util.List;
 
+import static java.lang.Math.max;
+import static java.lang.Math.min;
 import static primitives.Util.isZero;
 
 /**
@@ -66,7 +69,20 @@ public class Triangle extends Polygon {
         } else {
             return null;
         }
+    }
 
-
+    @Override
+    public void calcBoundaryBox() {
+        Point p1 = vertices.get(0);
+        Point p2 = vertices.get(1);
+        Point p3 = vertices.get(2);
+        boundaryBox = new BoundaryBox(
+                min(p1.getX(),min(p2.getX(),p3.getX())),
+                min(p1.getY(),min(p2.getY(),p3.getY())),
+                min(p1.getZ(),min(p2.getZ(),p3.getZ())),
+                max(p1.getX(),max(p2.getX(),p3.getX())),
+                max(p1.getY(),max(p2.getY(),p3.getY())),
+                max(p1.getZ(),max(p2.getZ(),p3.getZ()))
+        );
     }
 }

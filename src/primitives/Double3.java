@@ -45,6 +45,19 @@ public class Double3 {
       this.d3 = value;
    }
 
+   //todo
+   public double getD3() {
+      return d3;
+   }
+
+   public double getD2() {
+      return d2;
+   }
+
+   public double getD1() {
+      return d1;
+   }
+
    @Override
    public boolean equals(Object obj) {
       if (this == obj) return true;
@@ -94,6 +107,15 @@ public class Double3 {
    public Double3 reduce(double rhs) { return new Double3(d1 / rhs, d2 / rhs, d3 / rhs); }
 
    /**
+    * Reduce (divide) floating point triad by a number into a new triad where each
+    * number is divided by the number
+    * @param  rhs right hand side operand for reducing
+    * @return     result of scale
+    */
+   public Double3 reduce(Double3 rhs) { return new Double3(d1 / rhs.d1, d2 / rhs.d2, d3 / rhs.d3); }
+
+
+   /**
     * Product two floating point triads into a new triad where each couple of
     * numbers is multiplied
     * @param  rhs right hand side operand for product
@@ -117,4 +139,30 @@ public class Double3 {
     *               triad, false otherwise
     */
    public boolean lowerThan(Double3 other) { return d1 < other.d1 && d2 < other.d2 && d3 < other.d3; }
+
+   public Double3 min(Double3 t1) {
+      double min1 = Math.min(d1,t1.d1);
+      double min2 = Math.min(d2,t1.d2);
+      double min3 = Math.min(d3,t1.d3);
+      return new Double3(min1, min2, min3);
+   }
+
+   public Double3 max(Double3 t1) {
+      double max1 = Math.max(d1,t1.d1);
+      double max2 = Math.max(d2,t1.d2);
+      double max3 = Math.max(d3,t1.d3);
+      return new Double3(max1, max2, max3);
+   }
+
+   public Double3 changeD1(double t) {
+      return new Double3(t,d2,d3);
+   }
+
+   public Double3 changeD2(double t) {
+      return new Double3(d1,t,d3);
+   }
+
+   public Double3 changeD3(double t) {
+      return new Double3(d1,d2,t);
+   }
 }

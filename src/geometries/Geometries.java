@@ -1,10 +1,14 @@
 package geometries;
 
+import primitives.Double3;
 import primitives.Ray;
 
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+
+import static java.lang.Math.max;
+import static java.lang.Math.min;
 
 /**
  * Class Geometry is the class representing a list of geometric bodies or shapes in Cartesian
@@ -18,7 +22,9 @@ public class Geometries extends Intersectable {
     /**
      * an empty constructor to initialize an empty list of geometries
      */
-    public Geometries() { }
+    public Geometries() {
+        boundaryBox = new BoundaryBox(Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY);
+    }
 
     /**
      * a constructor to initialize a list of geometries with the geometries sent as parameters
@@ -50,4 +56,21 @@ public class Geometries extends Intersectable {
         }
         return intersections;
     }
+
+    @Override
+    public void calcBoundaryBox() {
+        boundaryBox = new BoundaryBox(Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY);
+        for (Intersectable intersectable : geometries) {
+            intersectable.calcBoundaryBox();
+            boundaryBox.setMinX(min(boundaryBox.getMinX(), intersectable.boundaryBox.getMinX()));
+            boundaryBox.setMaxX(max(boundaryBox.getMaxX(), intersectable.boundaryBox.getMaxX()));
+            boundaryBox.setMinX(min(boundaryBox.getMinX(), intersectable.boundaryBox.getMinX()));
+            boundaryBox.setMinX(min(boundaryBox.getMinX(), intersectable.boundaryBox.getMinX()));
+            boundaryBox.setMinX(min(boundaryBox.getMinX(), intersectable.boundaryBox.getMinX()));
+            boundaryBox.setMinX(min(boundaryBox.getMinX(), intersectable.boundaryBox.getMinX()));
+            boundaryBox.setMinX(min(boundaryBox.getMinX(), intersectable.boundaryBox.getMinX()));
+        }
+    }
+
+
 }

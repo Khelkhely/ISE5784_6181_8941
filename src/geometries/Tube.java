@@ -1,5 +1,6 @@
 package geometries;
 
+import primitives.Double3;
 import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
@@ -8,6 +9,8 @@ import static primitives.Util.alignZero;
 import static primitives.Util.isZero;
 
 import java.util.List;
+import java.util.MissingResourceException;
+
 import static java.lang.Math.sqrt;
 
 /**
@@ -86,6 +89,30 @@ public class Tube extends RadialGeometry {
                 new GeoPoint(this, ray.getPoint(d1)),
                 new GeoPoint(this, ray.getPoint(d2))
         );
+    }
+
+    @Override
+    public void calcBoundaryBox() {
+        if (boundaryBox == null) {
+            throw new MissingResourceException("default boundary box for tube not provided.",
+                    "Tube",
+                    "boundaryBox");
+        }
+        //reducing the boundary box in the cases that the rube is orthogonal to one or more axes
+        Vector direction = axis.getDirection();
+        Point head = axis.getHead();
+        if (direction.getX() == 0) {
+            boundaryBox.setMinX(head.getX() - radius);
+            boundaryBox.setMaxX(head.getX() + radius);
+        }
+        if (direction.getY() == 0) {
+            boundaryBox.setMinY(head.getY() - radius);
+            boundaryBox.setMaxY(head.getY() + radius);
+        }
+        if (direction.getZ() == 0) {
+            boundaryBox.setMinZ(head.getZ() - radius);
+            boundaryBox.setMaxZ(head.getZ() + radius);
+        }
     }
 
 }

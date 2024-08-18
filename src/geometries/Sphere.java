@@ -1,5 +1,6 @@
 package geometries;
 
+import primitives.Double3;
 import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
@@ -64,5 +65,17 @@ public class Sphere extends RadialGeometry {
             GeoPoint p2 = new GeoPoint(this, ray.getPoint(t2));
             return List.of(p1, p2);
         }
+    }
+
+    @Override
+    public void calcBoundaryBox() {
+        boundaryBox = new BoundaryBox(
+                center.getX() - radius,
+                center.getY() - radius,
+                center.getZ() - radius,
+                center.getX() + radius,
+                center.getY() + radius,
+                center.getZ() + radius
+        );
     }
 }

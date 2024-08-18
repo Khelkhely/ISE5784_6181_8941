@@ -250,7 +250,6 @@ public class ShadowTests {
               .setVpDistance(40)
               .setLocation(new Point(8,16,2))
               .setDirection(new Point(0,0,-1), new Vector(-1,-1,8))
-              .setAntiAliasing(new AntiAliasingSuperSampler(150))
               .build();
       cam.renderImage().writeToImage();
    }

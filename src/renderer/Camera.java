@@ -35,6 +35,8 @@ public class Camera implements Cloneable {
 
     /** a super sampler for antialiasing */
     private AntiAliasingSuperSampler antiAliasingSuperSampler = null;
+    /***/
+    private boolean boundaryVolumeOn = false;
 
     /**
      * private constructor for camera
@@ -146,6 +148,10 @@ public class Camera implements Cloneable {
      * @return the camera object
      */
     public Camera renderImage() {
+        if (boundaryVolumeOn){
+            rayTracer.scene.geometries.calcBoundaryBox();
+        }
+
         int nx = imageWriter.getNx();
         int ny = imageWriter.getNy();
 
@@ -309,6 +315,16 @@ public class Camera implements Cloneable {
          */
         public Builder setAntiAliasing(AntiAliasingSuperSampler antiAliasing) {
             camera.antiAliasingSuperSampler = antiAliasing;
+            return this;
+        }
+
+        /**
+         * a setter function for the flag of the boundary volume improvement
+         * @param boundaryVolumeOn the boundaryVolumeOn value
+         * @return the camera object with the updated boundaryVolumeOn value
+         */
+        public Builder setBoundaryVolumeOn(boolean boundaryVolumeOn) {
+            camera.boundaryVolumeOn = boundaryVolumeOn;
             return this;
         }
 

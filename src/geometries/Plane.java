@@ -1,10 +1,12 @@
 package geometries;
 
+import primitives.Double3;
 import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
 
 import java.util.List;
+import java.util.MissingResourceException;
 
 import static primitives.Util.alignZero;
 
@@ -71,6 +73,27 @@ public class Plane extends Geometry {
             return null;
         } else {
             return List.of(new GeoPoint(this, ray.getPoint(t)));
+        }
+    }
+
+    @Override
+    public void calcBoundaryBox() {
+        if (boundaryBox == null) {
+            throw new MissingResourceException("default boundary box for plane not provided.",
+                    "Plane",
+                    "boundaryBox");
+        }
+        //reducing the default boundary box in the cases that the plane is orthogonal to one of the axes
+        if (normal.equals(Vector.X)) {
+            boundaryBox.setMinX(q.getX()).setMaxX(q.getX());
+        } else {
+            if (normal.equals(Vector.Y)) {
+                boundaryBox.setMinY(q.getY()).setMaxY(q.getY());
+            } else {
+                if (normal.equals(Vector.Z)) {
+                    boundaryBox.setMinZ(q.getZ()).setMaxZ(q.getZ());
+                }
+            }
         }
     }
 }

@@ -1,127 +1,102 @@
-package renderer;
+package geometries;
 
-import geometries.*;
 import lighting.DirectionalLight;
 import lighting.PointLight;
 import org.junit.jupiter.api.Test;
 import primitives.*;
+import renderer.AntiAliasingSuperSampler;
+import renderer.Camera;
+import renderer.ImageWriter;
+import renderer.SimpleRayTracer;
 import scene.Scene;
 
-import static java.awt.Color.*;
+import static java.awt.Color.ORANGE;
 import static java.lang.Math.floor;
 import static org.junit.jupiter.api.Assertions.*;
 
-class AntiAliasingSuperSamplerTest {
+class BoundaryBoxTest {
 
     /**
-     * Test method for {@link AntiAliasingSuperSampler#calculateValue(Point, Point)}
+     * Test method for {@link BoundaryBox#doesIntersect(Ray)}
      */
     @Test
-    void testCalculateValue() {
-        Scene scene = new Scene("different colors");
-        Triangle blue = new Triangle(
-          new Point(0,0,3),
-          new Point(0,3,0),
-          Point.ZERO
+    void testDoesIntersect() {
+        BoundaryBox boundaryBox = new BoundaryBox(-1,0,0,1,2,3);
+        // ============ Equivalence Partitions Tests ==============
+        //TC01: the ray intersects the boundary box
+        Ray ray1 = new Ray(new Point(0,-1,0), new Vector(0,2,1));
+        assertTrue(
+                boundaryBox.doesIntersect(ray1),
+                "ERROR: doesn't work if the ray intersects the boundary box"
         );
-        Triangle green = new Triangle(
-                new Point(0,0,4),
-                new Point(0,-3,1),
-                new Point(0,0,1)
+        //TC02: the ray doesn't intersect the boundary box
+        Ray ray2 = new Ray(new Point(0,-1,0), new Vector(0,1,-1));
+        assertFalse(
+                boundaryBox.doesIntersect(ray2),
+                "ERROR: doesn't work if the ray intersects the boundary box"
+        );
+        //TC03: the ray starts inside the boundary box
+        Ray ray3 = new Ray(new Point(0,1,1), new Vector(0,2,1));
+        assertTrue(
+                boundaryBox.doesIntersect(ray3),
+                "ERROR: doesn't work if the ray intersects the boundary box"
+        );
+        //TC04: the ray's line intersects the boundary box and starts after it
+        Ray ray4 = new Ray(new Point(0,3,2), new Vector(0,2,1));
+        assertFalse(
+                boundaryBox.doesIntersect(ray4),
+                "ERROR: doesn't work if the ray intersects the boundary box"
         );
 
-        scene.geometries.add(
-                blue.setEmission(new Color(0,0,100)),
-                green.setEmission(new Color(0,100,0))
+        // =============== Boundary Values Tests ==================
+        //TC11: ray starts on the edge of the boundary box and doesn't intersect it
+        Ray ray5 = new Ray(new Point(0,0,1), new Vector(-1,-1,1));
+        assertFalse(
+                boundaryBox.doesIntersect(ray5),
+                "ERROR: doesn't work if the ray intersects the boundary box"
         );
-        scene.background = new Color(100,0,0);
+        //TC12: ray starts on the edge of the boundary box and intersects it
+        Ray ray6 = new Ray(new Point(0,0,1), new Vector(1,1,1));
+        assertTrue(
+                boundaryBox.doesIntersect(ray6),
+                "ERROR: doesn't work if the ray intersects the boundary box"
+        );
+        //TC13: ray intersects the boundary box on the edge of it
+        Ray ray7 = new Ray(new Point(0,-1,0), new Vector(0,1,3));
+        assertTrue(
+                boundaryBox.doesIntersect(ray7),
+                "ERROR: doesn't work if the ray intersects the boundary box"
+        );
+        //TC14: the ray is parallel to one of the axes and intersects the boundary box
+        Ray ray8 = new Ray(new Point(0,1,-1), Vector.Z);
+        assertTrue(
+                boundaryBox.doesIntersect(ray8),
+                "ERROR: doesn't work if the ray intersects the boundary box"
+        );
+        //TC15: the ray is parallel to one of the axes and doesn't intersect the boundary box
+        Ray ray9 = new Ray(new Point(2,0,0), Vector.Z);
+        assertFalse(
+                boundaryBox.doesIntersect(ray9),
+                "ERROR: doesn't work if the ray intersects the boundary box"
+        );
 
-        AntiAliasingSuperSampler antiAliasing = new AntiAliasingSuperSampler()
-                .setUp(Vector.Z)
-                .setRight(Vector.Y)
-                .setTargetArea(new RectangleJitteredGrid(4,1,1))
-                .setRayTracer(new SimpleRayTracer(scene));
-
-        assertEquals(
-                new Double3(25,25,50),
-                antiAliasing.calculateValue(new Point(100,0,0), new Point(1,0,1)),
-                "ERROR: doesn't return the average of the colors"
+        //TC16: the boundary box is flat and the ray intersects it
+        BoundaryBox flat = new BoundaryBox(-1,0,0,1,2,0);
+        Ray ray10 = new Ray(new Point(0,0,2), new Vector(0,1,-2));
+        assertTrue(
+                flat.doesIntersect(ray10),
+                "ERROR: doesn't work if the ray intersects the boundary box"
+        );
+        //TC16: the boundary box is flat and the ray doesn't intersect it
+        Ray ray11 = new Ray(new Point(2,0,0), new Vector(2,0,0));
+        assertFalse(
+                flat.doesIntersect(ray11),
+                "ERROR: doesn't work if the ray intersects the boundary box"
         );
     }
 
-    /*@Test
-    public void tempTest() {
-        Material material1 = new Material().setKs(0.5).setKd(0.5).setKt(1).setKr(0).setShininess(1);
-        Material material2 = new Material().setKs(0.5).setKd(0.5).setKt(1).setKr(0.5).setShininess(20);
-
-        Plane plane = new Plane(new Point(0,0,0), new Vector(1,0,0));
-        plane.setEmission(new Color(BLUE).scale(0.5))
-                .setMaterial(material1);
-
-        Sphere sphere1 = new Sphere(2, new Point(2,0,0));
-        sphere1.setEmission(new Color(WHITE))
-                .setMaterial(material2);
-        PointLight pointLight = new PointLight(new Color(YELLOW), new Point(0,2,2));
-        DirectionalLight directionalLight = new DirectionalLight(new Color(YELLOW).scale(0.3), new Vector(-1,0,0));
-        Scene scene = new Scene("plain");
-        scene.setBackground(new Color(BLACK))
-                .setAmbientLight(new AmbientLight(new Color(10,10,10), 0.1))
-                .setGeometries(new Geometries(plane, sphere1));
-        scene.lights.add(pointLight);
-        scene.lights.add(directionalLight);
-
-        Camera.Builder cameraBuilder = Camera.getBuilder()
-                .setImageWriter(new ImageWriter("tmp2", 800, 800))
-                .setRayTracer(new SimpleRayTracer(scene))
-                .setVpSize(5,5)
-                .setVpDistance(5)
-                .setLocation(new Point(10,0,0))
-                .setDirection(new Vector(-1,0,0), new Vector(0,0,1));
-
-        cameraBuilder
-                .setImageWriter(new ImageWriter("without anti aliasing", 800, 800))
-                .build().renderImage().writeToImage();
-        cameraBuilder
-                .setAntiAlising(new AntiAliasingSuperSampler(100))
-                .setImageWriter(new ImageWriter("with anti aliasing", 800, 800))
-                .build().renderImage().writeToImage();
-
-
-    }*/
-
     @Test
-    public void TriangleAntiAliasingTest() {
-        Triangle triangle = new Triangle(
-                Point.ZERO,
-                new Point(0,20,0),
-                new Point(0,0,20)
-        );
-
-        Scene scene = new Scene("TriangleAntiAliasingTest");
-        scene.geometries.add(triangle.setEmission(new Color(0,0,100)));
-        scene.background = new Color(0,100,0);
-
-        Camera.Builder cameraBuilder = new Camera.Builder()
-                .setLocation(new Point(40,10,10))
-                .setDirection(new Vector(-1,0,0), Vector.Z)
-                .setVpSize(5,5)
-                .setVpDistance(10)
-                .setRayTracer(new SimpleRayTracer(scene));
-
-        cameraBuilder
-                .setImageWriter(new ImageWriter("TriangleWithout",400,400))
-                .build().renderImage().writeToImage();
-
-        cameraBuilder
-                .setAntiAliasing(new AntiAliasingSuperSampler())
-                .setImageWriter(new ImageWriter("TriangleWith",400,400))
-                .build()
-                .renderImage()
-                .writeToImage();
-    }
-
-    @Test
-    public void MiniProject1Final() {
+    public void MakePictureTest() {
         Scene scene = new Scene("memory balls");
 
         Material ballMaterial = new Material().setKs(0.5).setKd(0.5).setShininess(20);
@@ -140,11 +115,15 @@ class AntiAliasingSuperSamplerTest {
         Ray axis1 = new Ray(center1, Vector.X);
         Ray axis2 = new Ray(center2, Vector.X);
         Geometry tube1 = new Tube(2.2, axis1).setMaterial(clearGlass).setEmission(tube);
+        tube1.boundaryBox = new BoundaryBox(-15,-2.2,0.3,13,2.2,4.7);
         Geometry tube2 = new Tube(2.2, axis2).setMaterial(clearGlass).setEmission(tube);
+        tube2.boundaryBox = new BoundaryBox(-14,-2.2,-4.7,14,2.2,-0.3);
         Geometry floor = new Plane(new Point(0,0,-5.5), Vector.Z)
                 .setMaterial(wallMaterial).setEmission(purple);
+        floor.boundaryBox = new BoundaryBox(-15,-2.5,-5.5,14,16,-5.5);
         Geometry wall = new Plane(new Point(0,-2.5,0), Vector.Y)
                 .setMaterial(ballMaterial).setEmission(purple);
+        wall.boundaryBox = new BoundaryBox(-15,-2.5,5,14,-2.5,-5.5);
         scene.geometries.add(tube1, tube2, floor, wall);
 
         Point[] points = new Point[8];
@@ -208,17 +187,16 @@ class AntiAliasingSuperSamplerTest {
         scene.lights.add(pl2);
         scene.lights.add(dl);
 
-        Camera.Builder camBuilder = Camera.getBuilder()
-                .setImageWriter(new ImageWriter("miniProject1WithoutImprovement",800,800))
+        Camera cam = Camera.getBuilder()
+                .setImageWriter(new ImageWriter("withBoundaryBox",800,800))
                 .setRayTracer(new SimpleRayTracer(scene))
                 .setVpSize(30,30)
                 .setVpDistance(40)
                 .setLocation(new Point(8,16,2))
-                .setDirection(new Point(0,0,-1), new Vector(-1,-1,8));
-        camBuilder.build().renderImage().writeToImage();
-        camBuilder
-                .setAntiAliasing(new AntiAliasingSuperSampler(400))
-                .setImageWriter(new ImageWriter("miniProject1WithImprovement",800,800))
-                .build().renderImage().writeToImage();
+                .setDirection(new Point(0,0,-1), new Vector(-1,-1,8))
+                .setAntiAliasing(new AntiAliasingSuperSampler())
+                .setBoundaryVolumeOn(false)
+                .build();
+        cam.renderImage().writeToImage();
     }
 }
