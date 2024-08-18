@@ -12,8 +12,17 @@ import java.util.List;
 public class AntiAliasingSuperSampler extends SuperSampler {
     /** a ray tracer the super sampler uses to calculate the color received from each sample ray */
     private RayTracerBase rayTracer = null;
+    /** a vector represents the up direction of the target area */
     private Vector up;
+    /** a vector represents the right direction of the target area */
     private Vector right;
+
+    /**
+     * an empty constructor to initialize an antialiasing super sampler object
+     */
+    public AntiAliasingSuperSampler() {
+        targetArea = new RectangleJitteredGrid();
+    }
 
     /**
      * a constructor to initialize an antialiasing super sampler object with the number of samples it'll generate
@@ -24,16 +33,9 @@ public class AntiAliasingSuperSampler extends SuperSampler {
     }
 
     /**
-     * an empty constructor to initialize an antialiasing super sampler object
-     */
-    public AntiAliasingSuperSampler() {
-        targetArea = new RectangleJitteredGrid();
-    }
-
-    /**
-     *
+     * setter method for the target area of the super sampler
      * @param targetArea the target area of the super sampler
-     * @return
+     * @return the AntiAliasingSuperSampler object
      */
     public AntiAliasingSuperSampler setTargetArea(TargetAreaBase targetArea) {
         super.setTargetArea(targetArea);
@@ -41,20 +43,19 @@ public class AntiAliasingSuperSampler extends SuperSampler {
     }
 
     /**
-     *
-     * @param rayTracer
-     * @return
+     * setter method for the ray tracer of the super sampler
+     * @param rayTracer a ray tracer the super sampler uses
+     * @return the AntiAliasingSuperSampler object
      */
     public AntiAliasingSuperSampler setRayTracer(RayTracerBase rayTracer) {
         this.rayTracer = rayTracer;
         return this;
     }
 
-    //todo javadoc
     /**
-     *
-     * @param up
-     * @return
+     * setter method for the up vector of the super sampler
+     * @param up a vector represents the up direction of the target area
+     * @return the AntiAliasingSuperSampler object
      */
     public AntiAliasingSuperSampler setUp(Vector up) {
         this.up = up;
@@ -62,17 +63,12 @@ public class AntiAliasingSuperSampler extends SuperSampler {
     }
 
     /**
-     *
-     * @param right
-     * @return
+     * setter method for the right vector of the super sampler
+     * @param right a vector represents the right direction of the target area
+     * @return the AntiAliasingSuperSampler object
      */
     public AntiAliasingSuperSampler setRight(Vector right) {
         this.right = right;
-        return this;
-    }
-
-    public AntiAliasingSuperSampler setNumberOfSamples(int numberOfSamples) {
-        this.targetArea.setNumberOfSamples(numberOfSamples);
         return this;
     }
 

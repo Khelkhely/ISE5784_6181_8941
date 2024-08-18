@@ -42,7 +42,7 @@ public class SimpleRayTracer extends RayTracerBase {
      * @param ray the ray from the camera to the point
      * @return the color of the GeoPoint received
      */
-    private Color calcColor(GeoPoint gp, Ray ray) {
+    protected Color calcColor(GeoPoint gp, Ray ray) {
         return calcColor(gp, ray, MAX_CALC_COLOR_LEVEL, INITIAL_K)
                 .add(scene.ambientLight.getIntensity());
     }
@@ -119,7 +119,7 @@ public class SimpleRayTracer extends RayTracerBase {
      * @param ray the ray
      * @return the closest intersection geoPoint the ray has with the scene and null if there are no intersections
      */
-    private GeoPoint findClosestIntersection(Ray ray) {
+    protected GeoPoint findClosestIntersection(Ray ray) {
         List<GeoPoint> intersections = scene.geometries.findGeoIntersections(ray);
         return intersections == null
                 ? null
@@ -204,4 +204,5 @@ public class SimpleRayTracer extends RayTracerBase {
         }
         return ktr;
     }
+
 }

@@ -118,13 +118,20 @@ public class Camera implements Cloneable {
         return new Ray(p0,center.subtract(p0));
     }
 
-    //todo javadoc
+    /**
+     * calculates the center of a certain pixel
+     * @param nX the number of columns on the view plane
+     * @param nY the number of rows on the view plane
+     * @param j the index of the column of the pixel on the view plane
+     * @param i the index of the row of the pixel on the view plane
+     * @return a point representing the pixel's center
+     */
     private Point getPixelCenter(int nX, int nY, int j, int i) {
-        Point center = pc; //the center of the pixel the ray goes through
-        double ry = viewPlaneHeight / nY; //height of each pixel
-        double rx = viewPlaneWidth / nX; //width of each pixel
-        double xj = (j - ((float) nX - 1) / 2) * rx; //how much to move horizontally from the center of the view plane
-        double yi = -(i - ((float) nY - 1) / 2) * ry; //how much to move vertically from the center of the view plane
+        Point center = pc; //the center of the view plain the ray goes through
+        double heightOfPix = viewPlaneHeight / nY; //height of each pixel
+        double widthOfPix = viewPlaneWidth / nX; //width of each pixel
+        double xj = (j - ((float) nX - 1) / 2) * widthOfPix; //how much to move horizontally from the center of the view plane
+        double yi = -(i - ((float) nY - 1) / 2) * heightOfPix; //how much to move vertically from the center of the view plane
         if (!isZero(xj)) { //move the point horizontally
             center = center.add(vRight.scale(xj));
         }
@@ -295,8 +302,13 @@ public class Camera implements Cloneable {
             return this;
         }
 
-        public Builder setAntiAlising(AntiAliasingSuperSampler antiAlising) {
-            camera.antiAliasingSuperSampler = antiAlising;
+        /**
+         * a setter function for the Anti-Aliasing super sampler of the camera
+         * @param antiAliasing a super sampler for antialiasing
+         * @return the camera object with the updated Anti-Aliasing super sampler
+         */
+        public Builder setAntiAliasing(AntiAliasingSuperSampler antiAliasing) {
+            camera.antiAliasingSuperSampler = antiAliasing;
             return this;
         }
 
