@@ -1,4 +1,4 @@
-package unitests.renderer;
+package renderer;
 import static java.awt.Color.YELLOW;
 
 import org.junit.jupiter.api.Test;
