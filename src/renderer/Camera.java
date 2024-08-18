@@ -164,7 +164,7 @@ public class Camera implements Cloneable {
             color = rayTracer.traceRay(ray);
         } else {
             Point pixelCenter = getPixelCenter(nX,nY,j,i);
-            color = antiAliasingSuperSampler.traceColor(p0, pixelCenter);
+            color = antiAliasingSuperSampler.calculateColor(p0, pixelCenter);
         }
         imageWriter.writePixel(j, i, color);
     }
@@ -346,7 +346,13 @@ public class Camera implements Cloneable {
             camera.pc = camera.p0.add(camera.vTo.scale(camera.viewPlaneDistance));
 
             if (camera.antiAliasingSuperSampler != null) {
-                (RectangleTargetArea)camera.antiAliasingSuperSampler.getTargetArea().
+                camera.antiAliasingSuperSampler
+                        .setRayTracer(camera.rayTracer)
+                        .setUp(camera.vUp)
+                        .setRight(camera.vRight)
+                        .getTargetArea()
+                        .setHeight(camera.viewPlaneHeight / camera.imageWriter.getNy())
+                        .setWidth(camera.viewPlaneWidth / camera.imageWriter.getNx());
             }
             try{
                 return (Camera) camera.clone();

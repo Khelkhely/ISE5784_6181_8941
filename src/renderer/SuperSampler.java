@@ -6,19 +6,25 @@ import java.util.List;
 
 /**
  * Class SuperSampler is a base abstract class that manages super sampling for rays in the image for improvements
+ * Calculates the average of the value from multiple samples rays instead of a simple ray to improve the image.
  * @author Rachel and Tehila
  */
 public abstract class SuperSampler {
     /** the target area object the super sampler uses to get sample points to create sample rays */
-    private TargetAreaBase targetArea;
+    protected TargetAreaBase targetArea;
 
     /**
      * a constructor to initialize a super sampler with its target area
-     * @param targetArea the target area the super sampler will use to get sample points
+     * @param numberOfSamples the number of sample rays the super sampler will generate
      */
-    public SuperSampler(TargetAreaBase targetArea) {
-        this.targetArea = targetArea;
+    public SuperSampler(int numberOfSamples) {
+        this.targetArea.setNumberOfSamples(numberOfSamples);
     }
+
+    /**
+     * an empty constructor to initialize a super sampler object
+     */
+    public SuperSampler() {}
 
     /**
      * getter method for target area
@@ -29,8 +35,8 @@ public abstract class SuperSampler {
     }
 
     /**
-     * setter method for target area
-     * @param targetArea the target area of the super sampler
+     * setter method for the target area of the super sampler
+     * @param targetArea the target area
      * @return the super sampler object
      */
     public SuperSampler setTargetArea(TargetAreaBase targetArea) {
@@ -39,12 +45,12 @@ public abstract class SuperSampler {
     }
 
     /**
-     * calculates the average of the colors traced with the super sampling
+     * calculates the average of the colors that are calculated for all the sample rays
      * @param convergence the point where all the sample rays converge
      * @param targetAreaCenter the center of the target area from which the sample points are created
      * @return the average color received by super sampling
      */
-    public Color traceColor (Point convergence, Point targetAreaCenter) {
+    public Color calculateColor(Point convergence, Point targetAreaCenter) {
         return new Color(calculateValue(convergence, targetAreaCenter));
     }
 
@@ -56,21 +62,22 @@ public abstract class SuperSampler {
      */
     public Double3 calculateValue(Point convergence, Point targetAreaCenter) {
         Double3 sum = Double3.ZERO;
-        List<Point> samples = targetArea.generateSamples(targetAreaCenter);
-        for (Point sample : samples) {
-            Ray sampleRay = constructSampleRay(convergence, sample);
+        List<Ray> sampleRays = generateBeamOfRays(convergence, targetAreaCenter);
+        for (Ray sampleRay : sampleRays) {
             sum = sum.add(traceRayValue(sampleRay));
         }
-        return sum.reduce(samples.size());
+        return sum.reduce(sampleRays.size());
     }
 
+    /* public abstract Ray constructSampleRay(Point convergence, Point sample);*/
+
     /**
-     * builds a sample ray between the sample point and the point of convergence
+     * creates a beam of sample rays between the point of convergence and a target area
      * @param convergence the point where all the sample rays converge
-     * @param sample a sample point generated on the sample area
-     * @return a sample ray
+     * @param targetAreaCenter the center of the target area from which the sample points are created
+     * @return a list of rays between the point of convergence and a target area
      */
-    public abstract Ray constructSampleRay(Point convergence, Point sample);
+    public abstract List<Ray> generateBeamOfRays(Point convergence, Point targetAreaCenter);
 
     /**
      * calculates the value of the ray that will be averaged between all the sample rays

@@ -242,15 +242,14 @@ public class ShadowTests {
       scene.lights.add(pl2);
       scene.lights.add(dl);
 
-      Point camLocation = new Point(8,16,2);
-
       Camera cam = Camera.getBuilder()
               .setImageWriter(new ImageWriter("stage7final",800,800))
               .setRayTracer(new SimpleRayTracer(scene))
               .setVpSize(30,30)
               .setVpDistance(40)
-              .setLocation(camLocation)
+              .setLocation(new Point(8,16,2))
               .setDirection(new Point(0,0,-1), new Vector(-1,-1,8))
+              .setAntiAlising(new AntiAliasingSuperSampler(150))
               .build();
       cam.renderImage().writeToImage();
    }
