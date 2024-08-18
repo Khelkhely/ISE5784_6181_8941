@@ -122,7 +122,7 @@ public class ShadowTests {
          .writeToImage();
    }
 
-   /** experimenting with making an image *//*
+  /* *//** experimenting with making an image *//*
    @Test
    public void tempTest() {
       Material material1 = new Material().setKs(0.5).setKd(0.5).setKt(1).setKr(0).setShininess(1);
@@ -146,7 +146,8 @@ public class ShadowTests {
 
       Camera.Builder camera = Camera.getBuilder()
               .setImageWriter(new ImageWriter("tmp2", 800, 800))
-              .setRayTracer(new SimpleRayTracer(scene))
+              //.setRayTracer(new SimpleRayTracer(scene))
+              .setRayTracer(new AntiAlisingRayTracer())
               .setVpSize(5,5)
               .setVpDistance(5)
               .setLocation(new Point(10,0,0))
@@ -249,7 +250,7 @@ public class ShadowTests {
               .setVpDistance(40)
               .setLocation(new Point(8,16,2))
               .setDirection(new Point(0,0,-1), new Vector(-1,-1,8))
-              .setAntiAlising(new AntiAliasingSuperSampler(150))
+              .setAntiAliasing(new AntiAliasingSuperSampler(150))
               .build();
       cam.renderImage().writeToImage();
    }

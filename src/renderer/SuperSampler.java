@@ -14,17 +14,17 @@ public abstract class SuperSampler {
     protected TargetAreaBase targetArea;
 
     /**
-     * a constructor to initialize a super sampler with its target area
+     * an empty constructor to create a super sampler object
+     */
+    public SuperSampler() {}
+
+    /**
+     * a constructor to initialize a super sampler with its numberOfSamples
      * @param numberOfSamples the number of sample rays the super sampler will generate
      */
     public SuperSampler(int numberOfSamples) {
-        this.targetArea.setNumberOfSamples(numberOfSamples);
+        targetArea = new RectangleJitteredGrid().setNumberOfSamples(numberOfSamples);
     }
-
-    /**
-     * an empty constructor to initialize a super sampler object
-     */
-    public SuperSampler() {}
 
     /**
      * getter method for target area
@@ -68,8 +68,6 @@ public abstract class SuperSampler {
         }
         return sum.reduce(sampleRays.size());
     }
-
-    /* public abstract Ray constructSampleRay(Point convergence, Point sample);*/
 
     /**
      * creates a beam of sample rays between the point of convergence and a target area

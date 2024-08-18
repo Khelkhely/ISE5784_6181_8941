@@ -113,7 +113,7 @@ class AntiAliasingSuperSamplerTest {
                 .build().renderImage().writeToImage();
 
         cameraBuilder
-                .setAntiAlising(new AntiAliasingSuperSampler())
+                .setAntiAliasing(new AntiAliasingSuperSampler())
                 .setImageWriter(new ImageWriter("TriangleWith",400,400))
                 .build()
                 .renderImage()
@@ -217,7 +217,7 @@ class AntiAliasingSuperSamplerTest {
                 .setDirection(new Point(0,0,-1), new Vector(-1,-1,8));
         camBuilder.build().renderImage().writeToImage();
         camBuilder
-                .setAntiAlising(new AntiAliasingSuperSampler(400))
+                .setAntiAliasing(new AntiAliasingSuperSampler(400))
                 .setImageWriter(new ImageWriter("miniProject1WithImprovement",800,800))
                 .build().renderImage().writeToImage();
     }
