@@ -9,7 +9,6 @@ import scene.Scene;
 import static java.lang.Math.floor;
 
 public class AccelerationTests {
-    Scene scene = new Scene("Mini Project 2");
     Material ballMaterial = new Material().setKs(0.5).setKd(0.5).setShininess(20);
     Material wallMaterial = new Material().setKs(0.5).setKd(0.5).setShininess(10).setKr(0.5);
     Material tubeMaterial = new Material().setKt(0.7).setShininess(30).setKs(0.7).setKd(0.3);
@@ -21,14 +20,16 @@ public class AccelerationTests {
     Color green = new Color(0, 100, 75);
     Color purple = new Color(20, 0, 45);
 
+    Point camLocation = new Point(30,0,27);
+
     BoundaryBox defaultBoundaryBox = null;
 
     Camera.Builder camBuild = new Camera.Builder()
             .setVpDistance(15)
             .setVpSize(10,10)
             .setDirection(new Vector(-1,0,0), Vector.Z)
-            .setLocation(new Point(30,0,27))
-            .setRayTracer(new SimpleRayTracer(scene));
+            .setLocation(camLocation)
+            .setRayTracer(new SimpleRayTracer(buildScene()));
             //.setAntiAliasing(new AntiAliasingSuperSampler());
     /**
      * creates a tube with colored spheres inside of it
@@ -44,7 +45,7 @@ public class AccelerationTests {
         Ray axis = new Ray(first, direction);
         Tube tube = new Tube(radius * 1.1, axis);
 
-        Geometries geometries = new Geometries(tube.setEmission(tubeColor).setMaterial(tubeMaterial));
+        Geometries geometries = new Geometries(tube.setEmission(tubeColor).setMaterial(tubeMaterial).setBoundaryBox(defaultBoundaryBox));
 
         for (int i = 0; i < numOfSpheres; i++) { //create all the spheres and add them to geometries
             Sphere sphere = new Sphere(radius, axis.getPoint(i * distance));
@@ -82,12 +83,12 @@ public class AccelerationTests {
         return new Geometries(top1,top2,bottom1,bottom2,front1,front2);
     }
 
-    @Test
-    public void buildScene() {
-        int numRows = 7;
+    public Scene buildScene() {
+        Scene scene = new Scene("Mini Project 2");
+        int numRows = 10;
         int numSpheres = 10;
         double radius = 2;
-        double shelfHeight = 1;
+        double shelfHeight = 0.1;
         double sphereShelf = radius * 1.1;
         double interval = sphereShelf * 2 + shelfHeight;
 
@@ -97,7 +98,14 @@ public class AccelerationTests {
         Point center2 = ray.getPoint(sphereShelf).add(Vector.X.scale(-sphereShelf));
         Ray shelf = new Ray(center2, Vector.Z);
 
-        //defaultBoundaryBox =
+        defaultBoundaryBox = new BoundaryBox(
+                center2.getX(),
+                (-numSpheres/2) * radius * 2.05,
+                center1.getZ() - sphereShelf,
+                camLocation.getX(),
+                (numSpheres/2) * radius * 2.05,
+                center1.getZ() + interval * numRows + sphereShelf
+        );
 
         for (int i = 0; i < numRows; i++) {
             Point point = ray.getPoint(i * interval);
@@ -109,33 +117,34 @@ public class AccelerationTests {
                             numSpheres
                     )
             );
-            /*scene.geometries.add(
+            scene.geometries.add(
                     buildShelf(
                             shelf.getPoint(i * interval),
                             radius*1.05,
                             numSpheres*radius*2.2,
                             shelfHeight,
                             Vector.Z,
-                            Vector.X
+                            Vector.Y
                     )
-            );*/
+            );
         }
 
         Plane wall = new Plane(center2, Vector.X);
         Plane floor = new Plane(ray.getPoint(-sphereShelf), Vector.Z);
 
-        wall.setEmission(purple).setMaterial(wallMaterial);
-        floor.setEmission(purple).setMaterial(wallMaterial);
+        wall.setEmission(purple).setMaterial(wallMaterial).setBoundaryBox(defaultBoundaryBox);
+        floor.setEmission(purple).setMaterial(wallMaterial).setBoundaryBox(defaultBoundaryBox);
 
         scene.geometries.add(wall,floor);
         scene.lights.add(new DirectionalLight(lightColor,new Vector(-1,0,0)));
+        return scene;
     }
 
 
     @Test
     public void NoAccelerations() {
         camBuild.setImageWriter(new ImageWriter("testing",200,200))
-                .setBoundaryVolumeOn(true)
+                //.setBoundaryVolumeOn(true)
                 .build().renderImage().writeToImage();
 
     }

@@ -13,6 +13,19 @@ public abstract class Intersectable {
     protected BoundaryBox boundaryBox = null;
 
     /**
+     * todo
+     * @return
+     */
+    public BoundaryBox getBoundaryBox() {
+        return boundaryBox;
+    }
+
+    public Intersectable setBoundaryBox(BoundaryBox boundaryBox) {
+        this.boundaryBox = boundaryBox;
+        return this;
+    }
+
+    /**
      * Class GeoPoint is the basic class representing a point on a geometry object in Cartesian
      * 3-Dimensional coordinate system.
      */
