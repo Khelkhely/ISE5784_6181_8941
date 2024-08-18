@@ -245,4 +245,25 @@ class AntiAliasingSuperSamplerTest {
 
         return geometries;
     }
+
+    private Geometries buildShelf(Point center, double length, double width, double height, Vector up, Vector forward) {
+        Vector right = up.crossProduct(forward).normalize();
+        Point topLeftA = center.add(right.scale(-length/2));
+        Point topRightA = center.add(right.scale(length/2));
+        Point bottomLeftA = topLeftA.add(forward.scale(width));
+        Point bottomRightA = topRightA.add(forward.scale(width));
+        Point topLeftB = topLeftA.add(up.scale(height));
+        Point topRightB = topRightA.add(up.scale(height));
+        Point bottomLeftB = bottomLeftA.add(up.scale(height));
+        Point bottomRightB = bottomRightA.add(up.scale(height));
+
+        Triangle top1 = new Triangle(topLeftA,topRightA,bottomLeftA);
+        Triangle top2 = new Triangle(bottomRightA,topRightA,bottomLeftA);
+        Triangle bottom1 = new Triangle(topLeftB,topRightB,bottomLeftB);
+        Triangle bottom2 = new Triangle(bottomRightB,topRightB,bottomLeftB);
+        Triangle front1 = new Triangle(bottomRightA,bottomLeftA,bottomRightB);
+        Triangle front2 = new Triangle(bottomLeftB,bottomLeftA,bottomRightB);
+
+        return new Geometries(top1,top2,bottom1,bottom2,front1,front2);
+    }
 }
