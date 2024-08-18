@@ -38,6 +38,21 @@ public class Camera implements Cloneable {
     /***/
     private boolean boundaryVolumeOn = false;
 
+
+    /** Pixel manager for supporting:
+     * <ul>
+     * <li>multi-threading</li>
+     * <li>debug print of progress percentage in Console window/tab</li>
+     * <ul>
+     */
+    private PixelManager pixelManager;
+
+
+    /**
+     * Amount of threads for multi threading, if not set is 0, so no multi threading is done
+     */
+    private int numOfThreads = 0;
+
     /**
      * private constructor for camera
      */
@@ -155,10 +170,41 @@ public class Camera implements Cloneable {
         int nx = imageWriter.getNx();
         int ny = imageWriter.getNy();
 
-        for (int j = 0; j < nx; j++) {
-            for (int i = 0; i < ny; i++) {
-                castRay(nx, ny, j, i);
+        pixelManager = new PixelManager(ny, nx, 0);
+
+        //if not using multi threads
+        if (numOfThreads == 0) {
+            //goes through every pixel in view plane  and casts ray, meaning creates a ray for every pixel and sets the color
+            for (int j = 0; j < nx; j++) {
+                for (int i = 0; i < ny; i++) {
+                    castRay(nx, ny, j, i);
+                }
             }
+
+        //if using multi threads
+        } else {
+            int threadsCount = numOfThreads;
+            var threads = new LinkedList<Thread>(); // list of threads
+            while (threadsCount-- > 0) // add appropriate number of threads
+                threads.add(new Thread(() -> { // add a thread with its code
+                    PixelManager.Pixel pixel; // current pixel(row,col)
+                    // allocate pixel(row,col) in loop until there are no more pixels
+                    while ((pixel = pixelManager.nextPixel()) != null)
+                        // cast ray through pixel (and color it – inside castRay)
+                        castRay(nx, ny, pixel.col(), pixel.row());
+                }));
+
+            // start all the threads
+            for (Thread thread : threads)
+                thread.start();
+
+            // wait until all the threads have finished
+            try {
+                for (Thread thread : threads)
+                    thread.join();
+            } catch (InterruptedException ignore) {
+            }
+
         }
         return this;
     }
@@ -180,6 +226,7 @@ public class Camera implements Cloneable {
             color = antiAliasingSuperSampler.calculateColor(p0, pixelCenter);
         }
         imageWriter.writePixel(j, i, color);
+        pixelManager.pixelDone();
     }
 
     /**
@@ -315,6 +362,16 @@ public class Camera implements Cloneable {
          */
         public Builder setAntiAliasing(AntiAliasingSuperSampler antiAliasing) {
             camera.antiAliasingSuperSampler = antiAliasing;
+            return this;
+        }
+
+        /**
+         * setter for number of threads in use
+         * @param numOfThreads the number of threads
+         * @return the camera object
+         */
+        public Builder setNumOfThreads(int numOfThreads) {
+            camera.numOfThreads = numOfThreads;
             return this;
         }
 
