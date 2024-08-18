@@ -97,7 +97,7 @@ public class AccelerationTests {
         Point center2 = ray.getPoint(sphereShelf).add(Vector.X.scale(-sphereShelf));
         Ray shelf = new Ray(center2, Vector.Z);
 
-        defaultBoundaryBox = 
+        //defaultBoundaryBox =
 
         for (int i = 0; i < numRows; i++) {
             Point point = ray.getPoint(i * interval);
