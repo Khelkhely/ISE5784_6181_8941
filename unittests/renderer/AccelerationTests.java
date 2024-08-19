@@ -6,6 +6,9 @@ import org.junit.jupiter.api.Test;
 import primitives.*;
 import scene.Scene;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static java.lang.Math.floor;
 
 public class AccelerationTests {
@@ -24,13 +27,20 @@ public class AccelerationTests {
 
     BoundaryBox defaultBoundaryBox = null;
 
-    Camera.Builder camBuild = new Camera.Builder()
-            .setVpDistance(15)
-            .setVpSize(10,10)
-            .setDirection(new Vector(-1,0,0), Vector.Z)
-            .setLocation(camLocation)
-            .setRayTracer(new SimpleRayTracer(buildScene()));
-            //.setAntiAliasing(new AntiAliasingSuperSampler());
+    Scene scene = buildScene();
+    Camera.Builder camBuild;
+    {
+        camBuild = new Camera.Builder()
+                .setVpDistance(15)
+                .setVpSize(10,10)
+                .setDirection(new Vector(-1,0,0), Vector.Z)
+                .setLocation(camLocation)
+                .setRayTracer(new SimpleRayTracer(scene))//;
+                .setAntiAliasing(new AntiAliasingSuperSampler());
+    }
+
+    private int numOfThreads = 3;
+
     /**
      * creates a tube with colored spheres inside of it
      * @param radius the radius of the spheres inside the tube
@@ -143,33 +153,47 @@ public class AccelerationTests {
 
     @Test
     public void NoAccelerations() {
-        camBuild.setImageWriter(new ImageWriter("testing",200,200))
-                //.setBoundaryVolumeOn(true)
+        camBuild.setImageWriter(new ImageWriter("NoAccelerations",200,200))
                 .build().renderImage().writeToImage();
-
-    }
-    @Test
-    public void FlatBoundaryVolume() {
-
-    }
-
-    @Test
-    public void BoundaryVolumeHierarchy() {
-
-    }
-
-    @Test
-    public void BoundaryVolumeAutomaticHierarchy() {
 
     }
 
     @Test
     public void MultiThreading() {
+        camBuild.setImageWriter(new ImageWriter("MultiThreading",200,200))
+                .setNumOfThreads(numOfThreads)
+                .build().renderImage().writeToImage();
+    }
 
+    @Test
+    public void FlatBoundaryVolume() {
+        camBuild.setImageWriter(new ImageWriter("FlatBoundaryVolume",200,200))
+                .setBoundaryVolumeOn(true)
+                .build().renderImage().writeToImage();
+    }
+
+    @Test
+    public void BoundaryVolumeHierarchy() {
+        /*Geometries geos2 = new Geometries(A, B, C);
+        Geometries geos3 = new Geometries(D, E);
+        Geometries geos1 = new Geometries(geos2, F, geos3);
+        scene.setGeometries(geos1);*/
+        camBuild.setImageWriter(new ImageWriter("BoundaryVolumeHierarchy",200,200))
+                .setBoundaryVolumeOn(true)
+                .build().renderImage().writeToImage();
+    }
+
+    @Test
+    public void BoundaryVolumeAutomaticHierarchy() {
+        List<BoundaryBox> objects = new ArrayList<>();
+        BVHNode root = BVHNode.buildBVH(objects);
     }
 
     @Test
     public void BoundaryVolumeMultiThreading() {
-
+        camBuild.setImageWriter(new ImageWriter("BoundaryVolumeMultiThreading",200,200))
+                .setBoundaryVolumeOn(true)
+                .setNumOfThreads(numOfThreads)
+                .build().renderImage().writeToImage();
     }
 }

@@ -4,9 +4,16 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-class BVHNode {
+/**
+ * BVHNode is a class representing a Node in the Bounding Volume Hierarchy tree.
+ * @author Rachel and Tehila
+ */
+public class BVHNode {
+    /** the bounding box of the node */
     BoundaryBox boundingBox;
+
     BVHNode left = null, right = null;
+
     List<BoundaryBox> objects;
 
     // Leaf node constructor
@@ -34,7 +41,7 @@ class BVHNode {
         return box;
     }
 
-    static BVHNode buildBVH(List<BoundaryBox> objects) {
+    public static BVHNode buildBVH(List<BoundaryBox> objects) {
         if (objects.size() <= 2) {
             return new BVHNode(objects); // Leaf node
         }

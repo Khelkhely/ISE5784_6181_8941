@@ -13,13 +13,18 @@ public abstract class Intersectable {
     protected BoundaryBox boundaryBox = null;
 
     /**
-     * todo
-     * @return
+     * getter methode for Intersectable's boundary box
+     * @return the boundary box of the intersectable
      */
     public BoundaryBox getBoundaryBox() {
         return boundaryBox;
     }
 
+    /**
+     * setter methode for Intersectable's boundary box
+     * @param boundaryBox the boundary box of the intersectable
+     * @return the Intersectable object itself
+     */
     public Intersectable setBoundaryBox(BoundaryBox boundaryBox) {
         this.boundaryBox = boundaryBox;
         return this;

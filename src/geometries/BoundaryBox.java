@@ -8,7 +8,7 @@ import primitives.Vector;
 /**
  * BoundaryBox is a class representing a conservative boundary region - an axis aligned box that restricts
  * an intersectable in a Cartesian 3-Dimensional coordinate system.
- * @author Tehila and Rachel
+ * @author Rachel and Tehila
  */
 public class BoundaryBox {
     /** the minimum x value of the boundary box */
@@ -40,6 +40,15 @@ public class BoundaryBox {
         this.maxX = max;
         this.maxY = max;
         this.maxZ = max;
+    }
+
+    public BoundaryBox(Double3 min, Double3 max) {
+        this.minX = min.getD1();
+        this.minY = min.getD2();
+        this.minZ = min.getD3();
+        this.maxX = max.getD1();
+        this.maxY = max.getD2();
+        this.maxZ = max.getD3();
     }
 
     public BoundaryBox(double x, double y, double z) {
