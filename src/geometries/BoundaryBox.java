@@ -33,6 +33,15 @@ public class BoundaryBox {
         this.maxZ = maxZ;
     }
 
+    public BoundaryBox(Double3 min, Double3 max) {
+        this.minX = min.getD1();
+        this.minY = min.getD2();
+        this.minZ = min.getD3();
+        this.maxX = max.getD1();
+        this.maxY = max.getD2();
+        this.maxZ = max.getD3();
+    }
+
     public BoundaryBox(double min, double max) {
         this.minX = min;
         this.minY = min;
@@ -49,6 +58,15 @@ public class BoundaryBox {
         this.maxX = y;
         this.maxY = z;
         this.maxZ = z;
+    }
+
+    public BoundaryBox(BoundaryBox boundaryBox) {
+        this.minX = boundaryBox.minX;
+        this.minY = boundaryBox.minY;
+        this.minZ = boundaryBox.minZ;
+        this.maxX = boundaryBox.maxX;
+        this.maxY = boundaryBox.maxY;
+        this.maxZ = boundaryBox.maxZ;
     }
 
     public double getMinX() {
@@ -239,24 +257,4 @@ public class BoundaryBox {
         double dz = maxZ - minZ;
         return 2 * (dx * dy + dy * dz + dz * dx);
     }
-
-    public static Geometries buildBVH(Geometries geometries) {
-        if (geometries.size() <= 2) {
-            return geometries.boundaryBox =  // Leaf node
-        }
-
-        // Sort objects along the z-axis for splitting (can choose other axes)
-        objects.sort(Comparator.comparingDouble(a -> a.getMinZ()));//todo
-
-        int mid = objects.size() / 2;
-
-        List<BoundaryBox> leftObjects = objects.subList(0, mid);
-        List<BoundaryBox> rightObjects = objects.subList(mid, objects.size());
-
-        BVHNode left = buildBVH(leftObjects);
-        BVHNode right = buildBVH(rightObjects);
-
-        return new BVHNode(left, right); // Internal node
-    }
-}
 }

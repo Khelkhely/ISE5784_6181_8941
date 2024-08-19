@@ -5,9 +5,11 @@ import primitives.Point;
 import primitives.Ray;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
+import static geometries.BoundaryBox.union;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 
@@ -44,11 +46,23 @@ public class Geometries extends Intersectable {
     }
 
     /**
+     * adds the geometries sent as parameters to the geometries list
+     * @param geometries the geometries to add to the list
+     */
+    public void add (List<Intersectable> geometries) {
+        this.geometries.addAll(geometries);
+    }
+
+    /**
      * return the amount of intersectables inside the geometries object
      * @return the amount of intersectables inside the geometries object
      */
     public int size() {
         return geometries.size();
+    }
+
+    public Intersectable getItem(int index) {
+        return geometries.get(index);
     }
 
     @Override
@@ -77,5 +91,24 @@ public class Geometries extends Intersectable {
         }
     }
 
+    public void buildBVH() {
+        calcBoundaryBox();
+        if (geometries.size() > 2) {
+            // Sort objects along the z-axis for splitting
+            geometries.sort(Comparator.comparingDouble(a -> a.boundaryBox.getMinZ()));
+
+            int mid = geometries.size() / 2;
+
+            List<Intersectable> leftObjects = geometries.subList(0, mid);
+            List<Intersectable> rightObjects = geometries.subList(mid, geometries.size());
+
+            geometries.clear();
+            Geometries right = new Geometries(rightObjects.toArray(new Intersectable[0]));
+            Geometries left = new Geometries(leftObjects.toArray(new Intersectable[0]));
+            right.buildBVH();
+            left.buildBVH();
+            add(right, left);
+        }
+    }
 
 }

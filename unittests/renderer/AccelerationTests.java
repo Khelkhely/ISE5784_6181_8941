@@ -231,7 +231,12 @@ public class AccelerationTests {
     }
     @Test
     public void FlatBoundaryVolume() {
-
+        Scene scene = buildFlatScene();
+        scene.geometries.buildBVH();
+        camBuild.setImageWriter(new ImageWriter("testing",200,200))
+                .setRayTracer(new SimpleRayTracer(scene))
+                .setBoundaryVolumeOn(true)
+                .build().renderImage().writeToImage();
     }
 
     @Test
