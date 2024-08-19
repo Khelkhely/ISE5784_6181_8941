@@ -1,6 +1,7 @@
 package geometries;
 
 import primitives.Double3;
+import primitives.Point;
 import primitives.Ray;
 
 import java.util.Arrays;
@@ -42,6 +43,14 @@ public class Geometries extends Intersectable {
         this.geometries.addAll(Arrays.asList(geometries));
     }
 
+    /**
+     * return the amount of intersectables inside the geometries object
+     * @return the amount of intersectables inside the geometries object
+     */
+    public int size() {
+        return geometries.size();
+    }
+
     @Override
     public List<GeoPoint> findGeoIntersectionsHelper(Ray ray, double maxDistance) {
         List<GeoPoint> intersections = null;
@@ -59,16 +68,12 @@ public class Geometries extends Intersectable {
 
     @Override
     public void calcBoundaryBox() {
-        boundaryBox = new BoundaryBox(Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY);
-        for (Intersectable intersectable : geometries) {
-            intersectable.calcBoundaryBox();
-            boundaryBox.setMinX(min(boundaryBox.getMinX(), intersectable.boundaryBox.getMinX()));
-            boundaryBox.setMaxX(max(boundaryBox.getMaxX(), intersectable.boundaryBox.getMaxX()));
-            boundaryBox.setMinX(min(boundaryBox.getMinX(), intersectable.boundaryBox.getMinX()));
-            boundaryBox.setMinX(min(boundaryBox.getMinX(), intersectable.boundaryBox.getMinX()));
-            boundaryBox.setMinX(min(boundaryBox.getMinX(), intersectable.boundaryBox.getMinX()));
-            boundaryBox.setMinX(min(boundaryBox.getMinX(), intersectable.boundaryBox.getMinX()));
-            boundaryBox.setMinX(min(boundaryBox.getMinX(), intersectable.boundaryBox.getMinX()));
+        if (geometries.size() > 0) {
+            boundaryBox = new BoundaryBox(Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY);
+            for (Intersectable geometry : geometries) {
+                geometry.calcBoundaryBox();
+                boundaryBox.add(geometry.boundaryBox);
+            }
         }
     }
 

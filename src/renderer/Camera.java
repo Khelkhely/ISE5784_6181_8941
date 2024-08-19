@@ -401,7 +401,15 @@ public class Camera implements Cloneable {
             }
             if (camera.vTo == null) {
                 if (pTo != null) { // if a direction point was given, calculate vTo here
+                    if (pTo.equals(camera.p0)) {
+                        throw new IllegalArgumentException("point to is equal to the camera's location.");
+                    }
                     camera.vTo = pTo.subtract(camera.p0).normalize();
+                    if (camera.vTo.equals(camera.vUp)) {
+                        throw new IllegalArgumentException("point to is in the direction of the up vector.");
+                    }
+                    camera.vRight = camera.vTo.crossProduct(camera.vUp).normalize();
+                    camera.vUp = camera.vRight.crossProduct(camera.vTo).normalize();
                 } else { // no direction was given in any form
                     throw new MissingResourceException(generalDescription, className, "To vector");
                 }

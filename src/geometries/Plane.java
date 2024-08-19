@@ -85,13 +85,16 @@ public class Plane extends Geometry {
         }
         //reducing the default boundary box in the cases that the plane is orthogonal to one of the axes
         if (normal.equals(Vector.X)) {
-            boundaryBox.setMinX(q.getX()).setMaxX(q.getX());
+            double qX = q.getX();
+            boundaryBox.setMinX(qX).setMaxX(qX);
         } else {
             if (normal.equals(Vector.Y)) {
-                boundaryBox.setMinY(q.getY()).setMaxY(q.getY());
+                double qY = q.getY();
+                boundaryBox.setMinY(qY).setMaxY(qY);
             } else {
                 if (normal.equals(Vector.Z)) {
-                    boundaryBox.setMinZ(q.getZ()).setMaxZ(q.getZ());
+                    double qZ = q.getZ();
+                    boundaryBox.setMinZ(qZ).setMaxZ(qZ);
                 }
             }
         }

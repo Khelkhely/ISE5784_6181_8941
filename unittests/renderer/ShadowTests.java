@@ -235,13 +235,13 @@ public class ShadowTests {
       spheres2[2].setEmission(blue);
       spheres2[3].setEmission(gold);
 
-      PointLight pl1 = new PointLight(lightColor,new Point(4,8,3));
-      PointLight pl2 = new PointLight(lightColor,new Point(-4,8,-3));
-      DirectionalLight dl = new DirectionalLight(new Color(ORANGE).scale(0.8), new Vector(0,-1,0));
+      PointLight pointLight = new PointLight(lightColor,new Point(4,8,-3));
+      SpotLight spotLight = new SpotLight(lightColor,new Point(-4,8,3),new Vector(-1,0,-1));
+      DirectionalLight directionalLight = new DirectionalLight(new Color(ORANGE).scale(0.8), new Vector(0,-1,0));
 
-      scene.lights.add(pl1);
-      scene.lights.add(pl2);
-      scene.lights.add(dl);
+      scene.lights.add(pointLight);
+      scene.lights.add(spotLight);
+      scene.lights.add(directionalLight);
 
       Camera cam = Camera.getBuilder()
               .setImageWriter(new ImageWriter("stage7final",800,800))
