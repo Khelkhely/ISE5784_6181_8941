@@ -1,7 +1,10 @@
 package renderer;
 
 import geometries.*;
+import lighting.AmbientLight;
 import lighting.DirectionalLight;
+import lighting.PointLight;
+import lighting.SpotLight;
 import org.junit.jupiter.api.Test;
 import primitives.*;
 import scene.Scene;
@@ -15,7 +18,8 @@ public class AccelerationTests {
     Material ballMaterial = new Material().setKs(0.5).setKd(0.5).setShininess(20);
     Material wallMaterial = new Material().setKs(0.5).setKd(0.5).setShininess(10).setKr(0.3);
     Material tubeMaterial = new Material().setKt(0.7).setShininess(30).setKs(0.7).setKd(0.3);
-    Color lightColor = new Color(180,132,120);
+    Color lightColor1 = new Color(120,120,80);
+    Color lightColor2 = new Color(120,120,0);
     Color tubeColor = new Color(0,0,20);
     Color gold = new Color(100, 75, 0);
     Color red = new Color(175, 0, 0);
@@ -23,16 +27,16 @@ public class AccelerationTests {
     Color green = new Color(0, 100, 75);
     Color purple = new Color(20, 0, 45);
 
-    Point camLocation = new Point(30,-5,25);
+    Point camLocation = new Point(30,-14,25);
 
     BoundaryBox defaultBoundaryBox = null;
 
     Camera.Builder camBuild = new Camera.Builder()
             .setVpDistance(15)
-            .setVpSize(21,21)
-            .setDirection(new Point(0,0,18), Vector.Z)
-            .setLocation(camLocation);
-            //.setAntiAliasing(new AntiAliasingSuperSampler());
+            .setVpSize(18,18)
+            .setDirection(new Point(0,-4,18), Vector.Z)
+            .setLocation(camLocation)
+            .setAntiAliasing(new AntiAliasingSuperSampler());
     /**
      * creates a tube with colored spheres inside of it
      * @param radius the radius of the spheres inside the tube
@@ -53,7 +57,18 @@ public class AccelerationTests {
 
         for (int i = 0; i < numOfSpheres; i++) { //create all the spheres and add them to geometries
             Sphere sphere = new Sphere(radius, axis.getPoint(i * distance));
-            geometries.add(sphere.setEmission(gold).setMaterial(ballMaterial));
+            if(i % 2 == 0){
+                geometries.add(sphere.setEmission(gold).setMaterial(ballMaterial));
+            }
+            if(i % 3 == 0){
+                geometries.add(sphere.setEmission(red).setMaterial(ballMaterial));
+            }
+            if(i % 5 == 0){
+                geometries.add(sphere.setEmission(green).setMaterial(ballMaterial));
+            }
+            if(i % 7 == 0){
+                geometries.add(sphere.setEmission(blue).setMaterial(ballMaterial));
+            }
         }
         return geometries;
     }
@@ -84,13 +99,13 @@ public class AccelerationTests {
         front1.setEmission(purple).setMaterial(wallMaterial);
         front2.setEmission(purple).setMaterial(wallMaterial);
 
-        geometries.add(top1,top2,bottom1,bottom2,front1,front2);
+        return List.of(top1,top2,bottom1,bottom2,front1,front2);
     }
 
     public Scene buildFlatScene() {
         Scene scene = new Scene("Mini Project 2");
         int numRows = 10;
-        int numSpheres = 11;
+        int numSpheres = 12;
         double radius = 2;
         double shelfHeight = 0.2;
         double sphereShelf = radius * 1.1;
@@ -140,7 +155,12 @@ public class AccelerationTests {
         floor.setEmission(purple).setMaterial(wallMaterial).setBoundaryBox(new BoundaryBox(defaultBoundaryBox));
 
         scene.geometries.add(wall,floor);
-        scene.lights.add(new DirectionalLight(lightColor,new Vector(-1,0,0)));
+        scene.lights.add(new DirectionalLight(lightColor1,new Vector(-1,0,0)));
+        scene.lights.add(new PointLight(lightColor1,new Point(5,7,10)));
+        scene.lights.add(new PointLight(lightColor1,new Point(5,-7,10)));
+        scene.lights.add(new SpotLight(lightColor2, new Point(7,0,30), new Vector(-1,0,-1)));
+        scene.lights.add(new SpotLight(lightColor2, new Point(7,0,0), new Vector(-1,0,1)));
+        scene.setAmbientLight(new AmbientLight(lightColor1,0.5));
         return scene;
     }
 
@@ -224,13 +244,18 @@ public class AccelerationTests {
         floor.setEmission(purple).setMaterial(wallMaterial).setBoundaryBox(new BoundaryBox(defaultBoundaryBox));
 
         scene.geometries.add(new Geometries(topHalf, bottomHalf, wall),floor);
-        scene.lights.add(new DirectionalLight(lightColor,new Vector(-1,0,0)));
+        scene.lights.add(new DirectionalLight(lightColor1,new Vector(-1,0,0)));
+        scene.lights.add(new PointLight(lightColor1,new Point(5,7,10)));
+        scene.lights.add(new PointLight(lightColor1,new Point(5,-7,10)));
+        scene.lights.add(new SpotLight(lightColor2, new Point(3,0,40), new Vector(-1,0,-1)));
+        scene.lights.add(new SpotLight(lightColor2, new Point(3,0,0), new Vector(-1,0,1)));
+        scene.setAmbientLight(new AmbientLight(lightColor1,0.5));
         return scene;
     }
 
     @Test
     public void NoAccelerations() {
-        camBuild.setImageWriter(new ImageWriter("NoAccelerations",200,200))
+        camBuild.setImageWriter(new ImageWriter("NoAccelerations",500,500))
                 .setRayTracer(new SimpleRayTracer(buildFlatScene()))
                 //.setBoundaryVolumeOn(true)
                 .build().renderImage().writeToImage();
@@ -240,7 +265,7 @@ public class AccelerationTests {
     public void FlatBoundaryVolume() {
         Scene scene = buildFlatScene();
         //scene.geometries.buildBVH();
-        camBuild.setImageWriter(new ImageWriter("FlatBoundaryVolume",200,200))
+        camBuild.setImageWriter(new ImageWriter("FlatBoundaryVolume",500,500))
                 .setRayTracer(new SimpleRayTracer(scene))
                 .setBoundaryVolumeOn(true)
                 .build().renderImage().writeToImage();
@@ -250,7 +275,7 @@ public class AccelerationTests {
     public void BoundaryVolumeHierarchy() {
         Scene scene = buildHierarchicalScene();
         //scene.geometries.buildBVH();
-        camBuild.setImageWriter(new ImageWriter("BoundaryVolumeHierarchy",200,200))
+        camBuild.setImageWriter(new ImageWriter("BoundaryVolumeHierarchy",500,500))
                 .setRayTracer(new SimpleRayTracer(scene))
                 .setBoundaryVolumeOn(true)
                 .build().renderImage().writeToImage();
@@ -260,7 +285,7 @@ public class AccelerationTests {
     public void BoundaryVolumeAutomaticHierarchy() {
         Scene scene = buildHierarchicalScene();
         scene.geometries.buildBVH();
-        camBuild.setImageWriter(new ImageWriter("BoundaryVolumeAutomaticHierarchy",200,200))
+        camBuild.setImageWriter(new ImageWriter("BoundaryVolumeAutomaticHierarchy",500,500))
                 .setRayTracer(new SimpleRayTracer(scene))
                 .setBoundaryVolumeOn(true)
                 .build().renderImage().writeToImage();
@@ -271,7 +296,7 @@ public class AccelerationTests {
     @Test
     public void MultiThreading() {
         Scene scene = buildFlatScene();
-        camBuild.setImageWriter(new ImageWriter("MultiThreading",200,200))
+        camBuild.setImageWriter(new ImageWriter("MultiThreading",500,500))
                 .setRayTracer(new SimpleRayTracer(scene))
                 .setNumOfThreads(numOfThreads)
                 .build().renderImage().writeToImage();
@@ -281,7 +306,7 @@ public class AccelerationTests {
     public void BoundaryVolumeMultiThreading() {
         Scene scene = buildHierarchicalScene();
         scene.geometries.buildBVH();
-        camBuild.setImageWriter(new ImageWriter("BoundaryVolumeMultiThreading",200,200))
+        camBuild.setImageWriter(new ImageWriter("BoundaryVolumeMultiThreading",500,500))
                 .setRayTracer(new SimpleRayTracer(scene))
                 .setBoundaryVolumeOn(true)
                 .setNumOfThreads(numOfThreads)
