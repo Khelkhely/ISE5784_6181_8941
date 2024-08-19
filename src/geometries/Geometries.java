@@ -38,6 +38,14 @@ public class Geometries extends Intersectable {
     }
 
     /**
+     * a constructor to initialize a list of geometries with the geometries sent as parameters
+     *
+     * todo
+     * */
+    public Geometries(List<Intersectable> geometries) {
+        this.geometries.addAll(geometries);    }
+
+    /**
      * adds the geometries sent as parameters to the geometries list
      * @param geometries the geometries to add to the list
      */
@@ -91,6 +99,9 @@ public class Geometries extends Intersectable {
         }
     }
 
+    /**
+     * build BVH using Bounding Volume Hierarchy algorithm
+     */
     public void buildBVH() {
         calcBoundaryBox();
         if (geometries.size() > 2) {
@@ -99,16 +110,17 @@ public class Geometries extends Intersectable {
 
             int mid = geometries.size() / 2;
 
-            List<Intersectable> leftObjects = geometries.subList(0, mid);
-            List<Intersectable> rightObjects = geometries.subList(mid, geometries.size());
+            List<Intersectable> leftObjects = new LinkedList<Intersectable>(geometries.subList(0, mid));
+            List<Intersectable> rightObjects = new LinkedList<Intersectable>(geometries.subList(mid, geometries.size()));
 
             geometries.clear();
-            Geometries right = new Geometries(rightObjects.toArray(new Intersectable[0]));
-            Geometries left = new Geometries(leftObjects.toArray(new Intersectable[0]));
+            Geometries right = new Geometries(rightObjects);
+            Geometries left = new Geometries(leftObjects);
             right.buildBVH();
             left.buildBVH();
             add(right, left);
         }
     }
+
 
 }
