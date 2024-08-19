@@ -45,17 +45,28 @@ public class Double3 {
       this.d3 = value;
    }
 
-   //todo
-   public double getD3() {
-      return d3;
+   /**
+    * a getter method for the d1 value of the Double3
+    * @return the d1 value of the Double3
+    */
+   public double getD1() {
+      return d1;
    }
 
+   /**
+    * a getter method for the d2 value of the Double3
+    * @return the d2 value of the Double3
+    */
    public double getD2() {
       return d2;
    }
 
-   public double getD1() {
-      return d1;
+   /**
+    * a getter method for the d3 value of the Double3
+    * @return the d3 value of the Double3
+    */
+   public double getD3() {
+      return d3;
    }
 
    @Override
@@ -140,6 +151,13 @@ public class Double3 {
     */
    public boolean lowerThan(Double3 other) { return d1 < other.d1 && d2 < other.d2 && d3 < other.d3; }
 
+   //todo
+
+   /**
+    *
+    * @param t1
+    * @return
+    */
    public Double3 min(Double3 t1) {
       double min1 = Math.min(d1,t1.d1);
       double min2 = Math.min(d2,t1.d2);

@@ -51,15 +51,6 @@ public class BoundaryBox {
         this.maxZ = z;
     }
 
-    public BoundaryBox(BoundaryBox boundaryBox) {
-        this.minX = boundaryBox.minX;
-        this.minY = boundaryBox.minY;
-        this.minZ = boundaryBox.minZ;
-        this.maxX = boundaryBox.maxX;
-        this.maxY = boundaryBox.maxY;
-        this.maxZ = boundaryBox.maxZ;
-    }
-
     public double getMinX() {
         return minX;
     }
@@ -222,6 +213,31 @@ public class BoundaryBox {
         if (maxZ < boundaryBox.maxZ) {
             maxZ = boundaryBox.maxZ;
         }
+    }
+
+    // Unites two BoundaryBoxes to create a new one that encompasses both
+    static BoundaryBox union(BoundaryBox a, BoundaryBox b) {
+        Double3 newMin = new Double3(
+                Math.min(a.minX, b.minX),
+                Math.min(a.minY, b.minY),
+                Math.min(a.minZ, b.minZ)
+        );
+
+        Double3 newMax = new Double3(
+                Math.max(a.maxX, b.maxX),
+                Math.max(a.maxY, b.maxY),
+                Math.max(a.maxZ, b.maxZ)
+        );
+
+        return new BoundaryBox(newMin, newMax);
+    }
+
+    // Calculates the surface area of the BoundaryBox
+    public double surfaceArea() {
+        double dx = maxX - minX;
+        double dy = maxY - minY;
+        double dz = maxZ - minZ;
+        return 2 * (dx * dy + dy * dz + dz * dx);
     }
 
     public static Geometries buildBVH(Geometries geometries) {

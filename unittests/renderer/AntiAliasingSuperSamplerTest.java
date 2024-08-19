@@ -9,7 +9,6 @@ import primitives.*;
 import scene.Scene;
 
 import static java.awt.Color.*;
-import static java.lang.Math.floor;
 import static org.junit.jupiter.api.Assertions.*;
 
 class AntiAliasingSuperSamplerTest {
