@@ -84,7 +84,7 @@ public class AccelerationTests {
         front1.setEmission(purple).setMaterial(wallMaterial);
         front2.setEmission(purple).setMaterial(wallMaterial);
 
-        return List.of(top1,top2,bottom1,bottom2,front1,front2);
+        geometries.add(top1,top2,bottom1,bottom2,front1,front2);
     }
 
     public Scene buildFlatScene() {
@@ -230,40 +230,61 @@ public class AccelerationTests {
 
     @Test
     public void NoAccelerations() {
-        camBuild.setImageWriter(new ImageWriter("testing",200,200))
-                .setRayTracer(new SimpleRayTracer(buildHierarchicalScene()))
-                .setNumOfThreads(3)
+        camBuild.setImageWriter(new ImageWriter("NoAccelerations",200,200))
+                .setRayTracer(new SimpleRayTracer(buildFlatScene()))
                 //.setBoundaryVolumeOn(true)
                 .build().renderImage().writeToImage();
 
     }
     @Test
     public void FlatBoundaryVolume() {
-        /*Scene scene = buildFlatScene();
-        scene.geometries.buildBVH();
-        camBuild.setImageWriter(new ImageWriter("testing",200,200))
+        Scene scene = buildFlatScene();
+        //scene.geometries.buildBVH();
+        camBuild.setImageWriter(new ImageWriter("FlatBoundaryVolume",200,200))
                 .setRayTracer(new SimpleRayTracer(scene))
                 .setBoundaryVolumeOn(true)
-                .build().renderImage().writeToImage();*/
+                .build().renderImage().writeToImage();
     }
 
     @Test
     public void BoundaryVolumeHierarchy() {
-
+        Scene scene = buildHierarchicalScene();
+        //scene.geometries.buildBVH();
+        camBuild.setImageWriter(new ImageWriter("BoundaryVolumeHierarchy",200,200))
+                .setRayTracer(new SimpleRayTracer(scene))
+                .setBoundaryVolumeOn(true)
+                .build().renderImage().writeToImage();
     }
 
     @Test
     public void BoundaryVolumeAutomaticHierarchy() {
-
+        Scene scene = buildHierarchicalScene();
+        scene.geometries.buildBVH();
+        camBuild.setImageWriter(new ImageWriter("BoundaryVolumeAutomaticHierarchy",200,200))
+                .setRayTracer(new SimpleRayTracer(scene))
+                .setBoundaryVolumeOn(true)
+                .build().renderImage().writeToImage();
     }
+
+    int numOfThreads = 3;
 
     @Test
     public void MultiThreading() {
-
+        Scene scene = buildFlatScene();
+        camBuild.setImageWriter(new ImageWriter("MultiThreading",200,200))
+                .setRayTracer(new SimpleRayTracer(scene))
+                .setNumOfThreads(numOfThreads)
+                .build().renderImage().writeToImage();
     }
 
     @Test
     public void BoundaryVolumeMultiThreading() {
-
+        Scene scene = buildHierarchicalScene();
+        scene.geometries.buildBVH();
+        camBuild.setImageWriter(new ImageWriter("BoundaryVolumeMultiThreading",200,200))
+                .setRayTracer(new SimpleRayTracer(scene))
+                .setBoundaryVolumeOn(true)
+                .setNumOfThreads(numOfThreads)
+                .build().renderImage().writeToImage();
     }
 }
