@@ -11,6 +11,8 @@ import java.util.List;
 public abstract class Intersectable {
     /** the boundary box of the intersectable */
     protected BoundaryBox boundaryBox = null;
+    /** a flag to represent whether intersections with this object should be done using a bounding box or not */
+    protected boolean boundaryBoxFlag = false;
 
     /**
      * getter methode for Intersectable's boundary box
@@ -96,7 +98,7 @@ public abstract class Intersectable {
      * to the head than the max distance.
      */
     public final List<GeoPoint> findGeoIntersections(Ray ray, double maxDistance) {
-        if (boundaryBox != null && !boundaryBox.doesIntersect(ray)) {
+        if (boundaryBoxFlag && !boundaryBox.doesIntersect(ray)) {
             return null;
         }
         return findGeoIntersectionsHelper(ray, maxDistance);

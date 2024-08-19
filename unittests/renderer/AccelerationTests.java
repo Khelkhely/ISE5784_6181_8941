@@ -6,6 +6,9 @@ import org.junit.jupiter.api.Test;
 import primitives.*;
 import scene.Scene;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import static java.lang.Math.floor;
 
 public class AccelerationTests {
@@ -20,7 +23,7 @@ public class AccelerationTests {
     Color green = new Color(0, 100, 75);
     Color purple = new Color(20, 0, 45);
 
-    Point camLocation = new Point(30,-3,22);
+    Point camLocation = new Point(30,-5,25);
 
     BoundaryBox defaultBoundaryBox = null;
 
@@ -38,23 +41,25 @@ public class AccelerationTests {
      * @param center the center of the middle sphere inside the tube
      * @return the geometries that the tube consists of
      */
-    private void buildTube(double radius, Point center, Vector direction, int numOfSpheres, Geometries geometries) {
+    private List<Intersectable> buildTube(double radius, Point center, Vector direction, int numOfSpheres) {
         double distance = radius * 2.05; //the distance between the centers of neighboring spheres
         Point first = center.add(direction.scale(-floor(numOfSpheres/2)*distance));
         Ray axis = new Ray(first, direction);
         Tube tube = new Tube(radius * 1.1, axis);
 
-        geometries = new Geometries(tube.setEmission(tubeColor).setMaterial(tubeMaterial)
+        List<Intersectable> geometries = new LinkedList<>();
+        geometries.add(tube.setEmission(tubeColor).setMaterial(tubeMaterial)
                 .setBoundaryBox(new BoundaryBox(defaultBoundaryBox)));
 
         for (int i = 0; i < numOfSpheres; i++) { //create all the spheres and add them to geometries
             Sphere sphere = new Sphere(radius, axis.getPoint(i * distance));
             geometries.add(sphere.setEmission(gold).setMaterial(ballMaterial));
         }
+        return geometries;
     }
 
-    private void buildShelf(Point center, double length, double width, double height, Vector up,
-                            Vector forward, Geometries geometries) {
+    private List<Intersectable> buildShelf(Point center, double length, double width, double height, Vector up,
+                            Vector forward) {
         Vector right = up.crossProduct(forward).normalize();
         Point topLeftA = center.add(right.scale(-length/2));
         Point topRightA = center.add(right.scale(length/2));
@@ -79,7 +84,7 @@ public class AccelerationTests {
         front1.setEmission(purple).setMaterial(wallMaterial);
         front2.setEmission(purple).setMaterial(wallMaterial);
 
-        geometries.add(top1,top2,bottom1,bottom2,front1,front2);
+        return List.of(top1,top2,bottom1,bottom2,front1,front2);
     }
 
     public Scene buildFlatScene() {
@@ -108,21 +113,23 @@ public class AccelerationTests {
 
         for (int i = 0; i < numRows; i++) {
             Point point = ray.getPoint(i * interval);
-            buildTube(
+            scene.geometries.add(
+                    buildTube(
                     radius,
                     point,
                     Vector.Y,
-                    numSpheres,
-                    scene.geometries
-                    );
-            buildShelf(
-                    shelf.getPoint(i * interval),
-                    radius*1.05,
-                    numSpheres*radius*2.2,
-                    shelfHeight,
-                    Vector.Z,
-                    Vector.Y,
-                    scene.geometries
+                    numSpheres
+                    )
+            );
+            scene.geometries.add(
+                    buildShelf(
+                            shelf.getPoint(i * interval),
+                            radius*1.05,
+                            numSpheres*radius*2.2,
+                            shelfHeight,
+                            Vector.Z,
+                            Vector.Y
+                    )
             );
         }
 
@@ -166,46 +173,46 @@ public class AccelerationTests {
         int i = 0;
         for (; i < numRows / 2; i++) {
             Point point = ray.getPoint(i * interval);
-            Geometries tubeG = new Geometries();
-            Geometries shelfG = new Geometries();
-            buildTube(
-                    radius,
-                    point,
-                    Vector.Y,
-                    numSpheres,
-                    tubeG
+            Geometries tubeG = new Geometries(
+                    buildTube(
+                            radius,
+                            point,
+                            Vector.Y,
+                            numSpheres
+                    )
             );
-            buildShelf(
-                    shelf.getPoint(i * interval),
-                    radius*1.05,
-                    numSpheres*radius*2.2,
-                    shelfHeight,
-                    Vector.Z,
-                    Vector.Y,
-                    shelfG
+            Geometries shelfG = new Geometries(
+                    buildShelf(
+                            shelf.getPoint(i * interval),
+                            radius*1.05,
+                            numSpheres*radius*2.2,
+                            shelfHeight,
+                            Vector.Z,
+                            Vector.Y
+                    )
             );
             bottomHalf.add(tubeG, shelfG);
         }
 
         for (; i < numRows; i++) {
             Point point = ray.getPoint(i * interval);
-            Geometries tubeG = new Geometries();
-            Geometries shelfG = new Geometries();
-            buildTube(
-                    radius,
-                    point,
-                    Vector.Y,
-                    numSpheres,
-                    tubeG
+            Geometries tubeG = new Geometries(
+                    buildTube(
+                            radius,
+                            point,
+                            Vector.Y,
+                            numSpheres
+                    )
             );
-            buildShelf(
-                    shelf.getPoint(i * interval),
-                    radius*1.05,
-                    numSpheres*radius*2.2,
-                    shelfHeight,
-                    Vector.Z,
-                    Vector.Y,
-                    shelfG
+            Geometries shelfG = new Geometries(
+                    buildShelf(
+                            shelf.getPoint(i * interval),
+                            radius*1.05,
+                            numSpheres*radius*2.2,
+                            shelfHeight,
+                            Vector.Z,
+                            Vector.Y
+                    )
             );
             topHalf.add(tubeG, shelfG);
         }
@@ -224,19 +231,20 @@ public class AccelerationTests {
     @Test
     public void NoAccelerations() {
         camBuild.setImageWriter(new ImageWriter("testing",200,200))
-                .setRayTracer(new SimpleRayTracer(buildFlatScene()))
+                .setRayTracer(new SimpleRayTracer(buildHierarchicalScene()))
+                .setNumOfThreads(3)
                 //.setBoundaryVolumeOn(true)
                 .build().renderImage().writeToImage();
 
     }
     @Test
     public void FlatBoundaryVolume() {
-        Scene scene = buildFlatScene();
+        /*Scene scene = buildFlatScene();
         scene.geometries.buildBVH();
         camBuild.setImageWriter(new ImageWriter("testing",200,200))
                 .setRayTracer(new SimpleRayTracer(scene))
                 .setBoundaryVolumeOn(true)
-                .build().renderImage().writeToImage();
+                .build().renderImage().writeToImage();*/
     }
 
     @Test

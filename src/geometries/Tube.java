@@ -98,6 +98,7 @@ public class Tube extends RadialGeometry {
                     "Tube",
                     "boundaryBox");
         }
+        boundaryBoxFlag = true;
         //reducing the boundary box in the cases that the rube is orthogonal to one or more axes
         Vector direction = axis.getDirection();
         Point head = axis.getHead();

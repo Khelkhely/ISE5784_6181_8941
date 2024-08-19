@@ -38,6 +38,14 @@ public class Geometries extends Intersectable {
     }
 
     /**
+     * a constructor to initialize a geometries with a list of the geometries sent as parameters
+     * @param geometries the list of geometries to initialize the geometry list with
+     */
+    public Geometries(List<Intersectable> geometries) {
+        add(geometries);
+    }
+
+    /**
      * adds the geometries sent as parameters to the geometries list
      * @param geometries the geometries to add to the list
      */
@@ -46,8 +54,8 @@ public class Geometries extends Intersectable {
     }
 
     /**
-     * adds the geometries sent as parameters to the geometries list
-     * @param geometries the geometries to add to the list
+     * adds the geometries sent in a list of geometries to the geometries
+     * @param geometries the list of the geometries to add to the list
      */
     public void add (List<Intersectable> geometries) {
         this.geometries.addAll(geometries);
@@ -88,6 +96,7 @@ public class Geometries extends Intersectable {
                 geometry.calcBoundaryBox();
                 boundaryBox.add(geometry.boundaryBox);
             }
+            boundaryBoxFlag = true;
         }
     }
 

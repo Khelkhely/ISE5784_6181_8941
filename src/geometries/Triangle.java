@@ -73,6 +73,7 @@ public class Triangle extends Polygon {
 
     @Override
     public void calcBoundaryBox() {
+        boundaryBoxFlag = true;
         if (boundaryBox == null) {
             Point p1 = vertices.get(0);
             Point p2 = vertices.get(1);

@@ -70,7 +70,8 @@ public class Sphere extends RadialGeometry {
 
     @Override
     public void calcBoundaryBox() {
-        if(boundaryBox == null) {
+        boundaryBoxFlag = true;
+        if (boundaryBox == null) {
             boundaryBox = new BoundaryBox(
                     center.getX() - radius,
                     center.getY() - radius,

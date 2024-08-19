@@ -83,6 +83,7 @@ public class Plane extends Geometry {
                     "Plane",
                     "boundaryBox");
         }
+        boundaryBoxFlag = true;
         //reducing the default boundary box in the cases that the plane is orthogonal to one of the axes
         if (normal.equals(Vector.X)) {
             double qX = q.getX();
