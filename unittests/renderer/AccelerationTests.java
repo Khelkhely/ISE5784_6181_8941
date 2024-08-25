@@ -8,7 +8,6 @@ import primitives.Vector;
 import scene.Scene;
 
 import java.util.*;
-
 import static java.lang.Math.floor;
 
 public class AccelerationTests {
