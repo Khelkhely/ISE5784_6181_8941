@@ -4,10 +4,7 @@ import primitives.Double3;
 import primitives.Point;
 import primitives.Ray;
 
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 import static geometries.BoundaryBox.union;
 import static java.lang.Math.max;
@@ -108,12 +105,12 @@ public class Geometries extends Intersectable {
 
             int mid = geometries.size() / 2;
 
-            List<Intersectable> leftObjects = geometries.subList(0, mid);
-            List<Intersectable> rightObjects = geometries.subList(mid, geometries.size());
+            List<Intersectable> leftObjects = List.copyOf(geometries.subList(0, mid));
+            List<Intersectable> rightObjects = List.copyOf(geometries.subList(mid, geometries.size()));
 
             geometries.clear();
-            Geometries right = new Geometries(rightObjects.toArray(new Intersectable[0]));
-            Geometries left = new Geometries(leftObjects.toArray(new Intersectable[0]));
+            Geometries right = new Geometries(rightObjects);
+            Geometries left = new Geometries(leftObjects);
             right.buildBVH();
             left.buildBVH();
             add(right, left);
