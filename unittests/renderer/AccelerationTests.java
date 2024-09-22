@@ -137,11 +137,11 @@ public class AccelerationTests {
             scene.geometries.add(
                     buildShelf(
                             shelf.getPoint(i * interval),
-                            radius*1.05,
                             numSpheres*radius*2.2,
+                            radius*2,
                             shelfHeight,
                             Vector.Z,
-                            Vector.Y
+                            Vector.X
                     )
             );
         }
@@ -191,11 +191,11 @@ public class AccelerationTests {
             Geometries shelfG = new Geometries(
                     buildShelf(
                             shelf.getPoint(i * interval),
-                            radius*1.05,
                             numSpheres*radius*2.2,
+                            radius*2,
                             shelfHeight,
                             Vector.Z,
-                            Vector.Y
+                            Vector.X
                     )
             );
             bottomHalf.add(tubeG, shelfG);
@@ -214,11 +214,11 @@ public class AccelerationTests {
             Geometries shelfG = new Geometries(
                     buildShelf(
                             shelf.getPoint(i * interval),
-                            radius*1.05,
                             numSpheres*radius*2.2,
+                            radius*2,
                             shelfHeight,
                             Vector.Z,
-                            Vector.Y
+                            Vector.X
                     )
             );
             topHalf.add(tubeG, shelfG);
@@ -238,7 +238,7 @@ public class AccelerationTests {
 
     @Test
     public void NoAccelerations() {
-        camBuild.setImageWriter(new ImageWriter("NoAccelerations",500,500))
+        camBuild.setImageWriter(new ImageWriter("NoAccelerations",800,800))
                 .setRayTracer(new SimpleRayTracer(buildFlatScene()))
                 .build().renderImage().writeToImage();
 
@@ -246,7 +246,7 @@ public class AccelerationTests {
     @Test
     public void FlatBoundaryVolume() {
         Scene scene = buildFlatScene();
-        camBuild.setImageWriter(new ImageWriter("FlatBoundaryVolume",500,500))
+        camBuild.setImageWriter(new ImageWriter("FlatBoundaryVolume",800,800))
                 .setRayTracer(new SimpleRayTracer(scene))
                 .setBoundaryVolumeOn(true)
                 .build().renderImage().writeToImage();
@@ -256,7 +256,7 @@ public class AccelerationTests {
     public void BoundaryVolumeHierarchy() {
         Scene scene = buildHierarchicalScene();
         //scene.geometries.buildBVH();
-        camBuild.setImageWriter(new ImageWriter("BoundaryVolumeHierarchy",500,500))
+        camBuild.setImageWriter(new ImageWriter("BoundaryVolumeHierarchy",800,800))
                 .setRayTracer(new SimpleRayTracer(scene))
                 .setBoundaryVolumeOn(true)
                 .build().renderImage().writeToImage();
@@ -266,7 +266,7 @@ public class AccelerationTests {
     public void BoundaryVolumeAutomaticHierarchy() {
         Scene scene = buildFlatScene();
         scene.geometries.buildBVH();
-        camBuild.setImageWriter(new ImageWriter("BoundaryVolumeAutomaticHierarchy",500,500))
+        camBuild.setImageWriter(new ImageWriter("BoundaryVolumeAutomaticHierarchy",800,800))
                 .setRayTracer(new SimpleRayTracer(scene))
                 .setBoundaryVolumeOn(true)
                 .build().renderImage().writeToImage();
@@ -277,7 +277,7 @@ public class AccelerationTests {
     @Test
     public void MultiThreading() {
         Scene scene = buildFlatScene();
-        camBuild.setImageWriter(new ImageWriter("MultiThreading",500,500))
+        camBuild.setImageWriter(new ImageWriter("MultiThreading",800,800))
                 .setRayTracer(new SimpleRayTracer(scene))
                 .setNumOfThreads(numOfThreads)
                 .build().renderImage().writeToImage();
@@ -287,7 +287,7 @@ public class AccelerationTests {
     public void BoundaryVolumeMultiThreading() {
         Scene scene = buildFlatScene();
         scene.geometries.buildBVH();
-        camBuild.setImageWriter(new ImageWriter("BoundaryVolumeMultiThreading",500,500))
+        camBuild.setImageWriter(new ImageWriter("BoundaryVolumeMultiThreading",800,800))
                 .setRayTracer(new SimpleRayTracer(scene))
                 .setBoundaryVolumeOn(true)
                 .setNumOfThreads(numOfThreads)
